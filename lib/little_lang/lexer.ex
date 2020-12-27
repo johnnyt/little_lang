@@ -3,11 +3,11 @@ defmodule LittleLang.Lexer do
   Module to lex a string of characters into a list of tokens.
   """
 
-  @spec lex(string :: binary()) :: list()
+  @spec tokenize(string :: binary()) :: list()
   @doc """
   Lex a string of characters into a list of tokens.
   """
-  def lex(string) do
+  def tokenize(string) do
     {:ok, tokens, _} =
       string
       |> String.to_charlist()
