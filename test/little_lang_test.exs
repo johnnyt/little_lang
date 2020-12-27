@@ -1,5 +1,5 @@
 defmodule LittleLangTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   doctest LittleLang
 
   test "greets the world" do

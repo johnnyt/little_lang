@@ -1,5 +1,5 @@
 defmodule LittleLang.EvaluatorTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   alias LittleLang.Evaluator
 
@@ -18,35 +18,5 @@ defmodule LittleLang.EvaluatorTest do
     test "includes provided context" do
       assert %{"name" => "Bob"} = Evaluator.build_context(%{"name" => "Bob"})
     end
-  end
-
-  test "evaluates basic boolean expression" do
-    assert true ==
-             Evaluator.process([
-               ["load", "true"],
-               ["bool_expr"]
-             ])
-
-    assert false ==
-             Evaluator.process([
-               ["load", "false"],
-               ["bool_expr"]
-             ])
-  end
-
-  test "evaluates undefined" do
-    assert :undefined ==
-             Evaluator.process([
-               ["load", "undefined"],
-               ["bool_expr"]
-             ])
-  end
-
-  test "converts any non-boolean value to :undefined" do
-    assert :undefined ==
-             Evaluator.process([
-               ["load", "foo"],
-               ["bool_expr"]
-             ])
   end
 end

@@ -6,7 +6,7 @@ defmodule LittleLang.Visitors.InstructionsVisitorTest do
 
   test "boolean" do
     source = "true"
-    {:ok, ast} = Parser.parse(source)
+    {:ok, ast} = Parser.process(source)
 
     assert [
              ["load", "true"],

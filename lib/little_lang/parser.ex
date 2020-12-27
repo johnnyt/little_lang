@@ -5,17 +5,17 @@ defmodule LittleLang.Parser do
 
   alias LittleLang.Lexer
 
-  @spec parse(tokens :: list()) :: map()
+  @spec process(tokens :: list()) :: map()
   @doc """
   Parse the input into an Abstract Syntax Tree.
   """
-  def parse(input) when is_binary(input) do
+  def process(input) when is_binary(input) do
     input
-    |> Lexer.tokenize!()
-    |> parse()
+    |> Lexer.process!()
+    |> process()
   end
 
-  def parse(input) when is_list(input) do
+  def process(input) when is_list(input) do
     input
     |> :little_lang_parser.parse()
   end
