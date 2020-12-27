@@ -5,6 +5,11 @@ defmodule LittleLang.LexerTest do
 
   doctest Lexer
 
+  test "lexes booleans" do
+    assert {:ok, [{:bool_lit, 1, true}]} = Lexer.tokenize("true")
+    assert {:ok, [{:bool_lit, 1, false}]} = Lexer.tokenize("false")
+  end
+
   test "lexes integer" do
     assert {:ok, [{:int_lit, 1, 1}]} = Lexer.tokenize("1")
     assert {:ok, [{:int_lit, 1, 42}]} = Lexer.tokenize("42")

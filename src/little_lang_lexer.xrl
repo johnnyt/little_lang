@@ -8,6 +8,8 @@ UNARY_OP   = (\+|-|!|not)
 
 Rules.
 
+true          : {token, {bool_lit, TokenLine, true}}.
+false         : {token, {bool_lit, TokenLine, false}}.
 {INT}         : {token, {int_lit, TokenLine, list_to_integer(TokenChars)}}.
 {UNARY_OP}    : {token, {op, TokenLine, list_to_atom(TokenChars)}}.
 {REL_OP}      : {token, {op, TokenLine, list_to_atom(TokenChars)}}.
