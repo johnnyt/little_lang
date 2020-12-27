@@ -5,6 +5,10 @@ defmodule LittleLang.LexerTest do
 
   doctest Lexer
 
+  test "tokenize! returns unwrapped tokens" do
+    assert [{:identifier, 1, "true"}] = Lexer.tokenize!("true")
+  end
+
   test "lexes identifiers" do
     assert {:ok, [{:identifier, 1, "true"}]} = Lexer.tokenize("true")
     assert {:ok, [{:identifier, 1, "false"}]} = Lexer.tokenize("false")
