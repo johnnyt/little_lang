@@ -13,11 +13,32 @@ defmodule LittleLang.EvaluatorTest do
   end
 
   test "evaluates basic boolean expression" do
-    instructions = [
-      ["load", "true"],
-      ["bool_expr"]
-    ]
+    assert true ==
+             Evaluator.process([
+               ["load", "true"],
+               ["bool_expr"]
+             ])
 
-    assert true = Evaluator.process(instructions)
+    assert false ==
+             Evaluator.process([
+               ["load", "false"],
+               ["bool_expr"]
+             ])
+  end
+
+  test "evaluates undefined" do
+    assert :undefined ==
+             Evaluator.process([
+               ["load", "undefined"],
+               ["bool_expr"]
+             ])
+  end
+
+  test "converts any non-boolean value to :undefined" do
+    assert :undefined ==
+             Evaluator.process([
+               ["load", "foo"],
+               ["bool_expr"]
+             ])
   end
 end

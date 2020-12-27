@@ -12,6 +12,7 @@ defmodule LittleLang.LexerTest do
   test "lexes identifiers" do
     assert {:ok, [{:identifier, 1, "true"}]} = Lexer.tokenize("true")
     assert {:ok, [{:identifier, 1, "false"}]} = Lexer.tokenize("false")
+    assert {:ok, [{:identifier, 1, "undefined"}]} = Lexer.tokenize("undefined")
 
     assert {:ok, [{:identifier, 1, "var_1"}]} = Lexer.tokenize("var_1")
     assert {:ok, [{:identifier, 1, "_var"}]} = Lexer.tokenize("_var")

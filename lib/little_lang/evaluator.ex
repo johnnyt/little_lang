@@ -23,7 +23,8 @@ defmodule LittleLang.Evaluator do
   def default_context() do
     %{
       "true" => true,
-      "false" => false
+      "false" => false,
+      "undefined" => :undefined
     }
   end
 
@@ -47,11 +48,17 @@ defmodule LittleLang.Evaluator do
     %__MODULE__{evaluator | stack: [value | stack]}
   end
 
+  # If the top of the stack is a boolean - return that
   def process_instruction(
-        %__MODULE__{processing: ["bool_expr"], stack: [_bool | _rest]} = evaluator
-      ) do
+        %__MODULE__{processing: ["bool_expr"], stack: [head | _rest]} = evaluator
+      )
+      when is_boolean(head),
+      do: evaluator
+
+  # The top of the stack is NOT a boolean - return undefined
+  def process_instruction(%__MODULE__{processing: ["bool_expr"]} = evaluator) do
     # do nothing for now
-    evaluator
+    %__MODULE__{evaluator | stack: [:undefined]}
   end
 
   # Done processing instructions - return the top of the stack
