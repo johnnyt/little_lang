@@ -20,17 +20,29 @@ defmodule LittleLang.LexerTest do
     assert {:ok, [{:int_lit, 1, 42}, {:int_lit, 1, 43}]} = Lexer.lex("42\t43")
   end
 
-  # test "lexes and removes comments" do
-  #   assert {:ok, [{:comment_sl, 1, " Single line comment"}]} = Lexer.lex("# Single line comment")
-
-  #   assert {:ok, [{:comment_ml, 1, " Multi\n  line\n  comment "}]} =
-  #            Lexer.lex("""
-  #            /* Multi
-  #               line
-  #               comment */
-  #            """)
-  # end
   test "lexes and removes comments" do
     assert {:ok, [{:int_lit, 1, 42}]} = Lexer.lex("42 # Single line comment")
+  end
+
+  test "lexes unary operators" do
+    assert {:ok, [{:op, 1, :+}]} = Lexer.lex("+")
+    assert {:ok, [{:op, 1, :-}]} = Lexer.lex("-")
+    assert {:ok, [{:op, 1, :!}]} = Lexer.lex("!")
+    assert {:ok, [{:op, 1, :not}]} = Lexer.lex("not")
+
+    assert {:ok, [{:op, 1, :-}, {:int_lit, 1, 42}]} = Lexer.lex("-42")
+  end
+
+  test "lexes binary operators" do
+    assert {:ok, [{:op, 1, :=}]} = Lexer.lex("=")
+    assert {:ok, [{:op, 1, :!=}]} = Lexer.lex("!=")
+    assert {:ok, [{:op, 1, :>}]} = Lexer.lex(">")
+    assert {:ok, [{:op, 1, :>=}]} = Lexer.lex(">=")
+    assert {:ok, [{:op, 1, :<}]} = Lexer.lex("<")
+    assert {:ok, [{:op, 1, :<=}]} = Lexer.lex("<=")
+    assert {:ok, [{:op, 1, :is}]} = Lexer.lex("is")
+    assert {:ok, [{:op, 1, :"is not"}]} = Lexer.lex("is not")
+
+    assert {:ok, [{:int_lit, 1, 42}, {:op, 1, :=}, {:int_lit, 1, 42}]} = Lexer.lex("42 = 42")
   end
 end
