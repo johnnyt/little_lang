@@ -12,7 +12,7 @@
 -export([format_error/1]).
 
 %% User code. This is placed here to allow extra attributes.
--file("src/little_lang_lexer.xrl", 11).
+-file("src/little_lang_lexer.xrl", 14).
 
 -file("/Users/johnnyt/.asdf/installs/erlang/23.0/lib/parsetools-2.2/include/leexinc.hrl", 14).
 
@@ -306,34 +306,42 @@ adjust_line(T, A, [_|Cs], L) ->
 %% input.
 
 -file("src/little_lang_lexer.erl", 307).
-yystate() -> 1.
+yystate() -> 0.
 
+yystate(3, [C|Ics], Line, Tlen, _, _) when C >= 48, C =< 57 ->
+    yystate(3, Ics, Line, Tlen+1, 0, Tlen);
+yystate(3, Ics, Line, Tlen, _, _) ->
+    {0,Tlen,Ics,Line,3};
 yystate(2, [32|Ics], Line, Tlen, _, _) ->
-    yystate(2, Ics, Line, Tlen+1, 1, Tlen);
+    yystate(2, Ics, Line, Tlen+1, 2, Tlen);
 yystate(2, [13|Ics], Line, Tlen, _, _) ->
-    yystate(2, Ics, Line, Tlen+1, 1, Tlen);
+    yystate(2, Ics, Line, Tlen+1, 2, Tlen);
 yystate(2, [9|Ics], Line, Tlen, _, _) ->
-    yystate(2, Ics, Line, Tlen+1, 1, Tlen);
+    yystate(2, Ics, Line, Tlen+1, 2, Tlen);
 yystate(2, [10|Ics], Line, Tlen, _, _) ->
-    yystate(2, Ics, Line+1, Tlen+1, 1, Tlen);
+    yystate(2, Ics, Line+1, Tlen+1, 2, Tlen);
 yystate(2, Ics, Line, Tlen, _, _) ->
-    {1,Tlen,Ics,Line,2};
-yystate(1, [32|Ics], Line, Tlen, Action, Alen) ->
+    {2,Tlen,Ics,Line,2};
+yystate(1, [C|Ics], Line, Tlen, _, _) when C >= 0, C =< 9 ->
+    yystate(1, Ics, Line, Tlen+1, 1, Tlen);
+yystate(1, [C|Ics], Line, Tlen, _, _) when C >= 11 ->
+    yystate(1, Ics, Line, Tlen+1, 1, Tlen);
+yystate(1, Ics, Line, Tlen, _, _) ->
+    {1,Tlen,Ics,Line,1};
+yystate(0, [35|Ics], Line, Tlen, Action, Alen) ->
+    yystate(1, Ics, Line, Tlen+1, Action, Alen);
+yystate(0, [32|Ics], Line, Tlen, Action, Alen) ->
     yystate(2, Ics, Line, Tlen+1, Action, Alen);
-yystate(1, [13|Ics], Line, Tlen, Action, Alen) ->
+yystate(0, [13|Ics], Line, Tlen, Action, Alen) ->
     yystate(2, Ics, Line, Tlen+1, Action, Alen);
-yystate(1, [9|Ics], Line, Tlen, Action, Alen) ->
+yystate(0, [9|Ics], Line, Tlen, Action, Alen) ->
     yystate(2, Ics, Line, Tlen+1, Action, Alen);
-yystate(1, [10|Ics], Line, Tlen, Action, Alen) ->
+yystate(0, [10|Ics], Line, Tlen, Action, Alen) ->
     yystate(2, Ics, Line+1, Tlen+1, Action, Alen);
-yystate(1, [C|Ics], Line, Tlen, Action, Alen) when C >= 48, C =< 57 ->
-    yystate(0, Ics, Line, Tlen+1, Action, Alen);
-yystate(1, Ics, Line, Tlen, Action, Alen) ->
-    {Action,Alen,Tlen,Ics,Line,1};
-yystate(0, [C|Ics], Line, Tlen, _, _) when C >= 48, C =< 57 ->
-    yystate(0, Ics, Line, Tlen+1, 0, Tlen);
-yystate(0, Ics, Line, Tlen, _, _) ->
-    {0,Tlen,Ics,Line,0};
+yystate(0, [C|Ics], Line, Tlen, Action, Alen) when C >= 48, C =< 57 ->
+    yystate(3, Ics, Line, Tlen+1, Action, Alen);
+yystate(0, Ics, Line, Tlen, Action, Alen) ->
+    {Action,Alen,Tlen,Ics,Line,0};
 yystate(S, Ics, Line, Tlen, Action, Alen) ->
     {Action,Alen,Tlen,Ics,Line,S}.
 
@@ -346,16 +354,23 @@ yyaction(0, TokenLen, YYtcs, TokenLine) ->
     yyaction_0(TokenChars, TokenLine);
 yyaction(1, _, _, _) ->
     yyaction_1();
+yyaction(2, _, _, _) ->
+    yyaction_2();
 yyaction(_, _, _, _) -> error.
 
 -compile({inline,yyaction_0/2}).
--file("src/little_lang_lexer.xrl", 6).
+-file("src/little_lang_lexer.xrl", 8).
 yyaction_0(TokenChars, TokenLine) ->
      { token, { int_lit, TokenLine, list_to_integer (TokenChars) } } .
 
 -compile({inline,yyaction_1/0}).
--file("src/little_lang_lexer.xrl", 7).
+-file("src/little_lang_lexer.xrl", 9).
 yyaction_1() ->
+     skip_token .
+
+-compile({inline,yyaction_2/0}).
+-file("src/little_lang_lexer.xrl", 10).
+yyaction_2() ->
      skip_token .
 
 -file("/Users/johnnyt/.asdf/installs/erlang/23.0/lib/parsetools-2.2/include/leexinc.hrl", 313).
