@@ -5,9 +5,17 @@ defmodule LittleLang.LexerTest do
 
   doctest Lexer
 
-  test "lexes booleans" do
-    assert {:ok, [{:bool_lit, 1, true}]} = Lexer.tokenize("true")
-    assert {:ok, [{:bool_lit, 1, false}]} = Lexer.tokenize("false")
+  test "lexes identifiers" do
+    assert {:ok, [{:identifier, 1, "true"}]} = Lexer.tokenize("true")
+    assert {:ok, [{:identifier, 1, "false"}]} = Lexer.tokenize("false")
+
+    assert {:ok, [{:identifier, 1, "var_1"}]} = Lexer.tokenize("var_1")
+    assert {:ok, [{:identifier, 1, "_var"}]} = Lexer.tokenize("_var")
+    assert {:ok, [{:identifier, 1, "Var_"}]} = Lexer.tokenize("Var_")
+  end
+
+  test "does not lex invalid identifiers" do
+    refute {:ok, [{:identifier, 1, "1var"}]} == Lexer.tokenize("1var")
   end
 
   test "lexes integer" do
