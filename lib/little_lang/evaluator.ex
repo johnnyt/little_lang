@@ -16,16 +16,16 @@ defmodule LittleLang.Evaluator do
     stack: []
   ]
 
-  @spec default_context() :: Map.t()
+  @spec build_context(map :: Map.t()) :: Map.t()
   @doc """
-  Returns the default context with globals added
+  Returns the default context with globals merged onto the provided map.
   """
-  def default_context() do
-    %{
+  def build_context(map \\ %{}) do
+    Map.merge(map, %{
       "true" => true,
       "false" => false,
       "undefined" => :undefined
-    }
+    })
   end
 
   @spec process(instructions :: list()) :: bool_or_undefined
@@ -34,7 +34,7 @@ defmodule LittleLang.Evaluator do
   """
   def process(instructions) when is_list(instructions) do
     %__MODULE__{
-      context: default_context(),
+      context: build_context(),
       instructions: instructions,
       instructions_length: length(instructions)
     }
