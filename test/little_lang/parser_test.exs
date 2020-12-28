@@ -9,4 +9,12 @@ defmodule LittleLang.ParserTest do
     assert {:ok, {:bool_expr, {:expression, {:unary_expr, {:basic_expr, {:identifier, "true"}}}}}} =
              Parser.process("true")
   end
+
+  test "parses unary op and expression" do
+    assert {:ok,
+            {:bool_expr,
+             {:expression,
+              {:not_, {:unary_expr, {:basic_expr, {:identifier, "true"}}}, {:bang, "!"}}}}} =
+             Parser.process("!true")
+  end
 end

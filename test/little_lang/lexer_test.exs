@@ -38,9 +38,8 @@ defmodule LittleLang.LexerTest do
   end
 
   test "lexes unary operators" do
-    assert {:ok, [{:bang, 1, :!}]} = Lexer.process("!")
-    assert {:ok, [{:not_, 1, :not}]} = Lexer.process("not")
-
-    assert {:ok, [{:bang, 1, :!}, {:identifier, 1, "true"}]} = Lexer.process("!true")
+    assert {:ok, [{:bang, 1, "!"}]} = Lexer.process("!")
+    assert {:ok, [{:not_, 1, "not"}]} = Lexer.process("not")
+    assert {:ok, [{:bang, 1, "!"}, {:identifier, 1, "true"}]} = Lexer.process("!true")
   end
 end

@@ -451,12 +451,12 @@ yyaction_0(TokenChars, TokenLine) ->
 -compile({inline,yyaction_1/2}).
 -file("src/little_lang_lexer.xrl", 10).
 yyaction_1(TokenChars, TokenLine) ->
-     { token, { bang, TokenLine, list_to_atom (TokenChars) } } .
+     { token, { bang, TokenLine, list_to_binary (TokenChars) } } .
 
 -compile({inline,yyaction_2/2}).
 -file("src/little_lang_lexer.xrl", 11).
 yyaction_2(TokenChars, TokenLine) ->
-     { token, { not_, TokenLine, list_to_atom (TokenChars) } } .
+     { token, { not_, TokenLine, list_to_binary (TokenChars) } } .
 
 -compile({inline,yyaction_3/2}).
 -file("src/little_lang_lexer.xrl", 12).

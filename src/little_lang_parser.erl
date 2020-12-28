@@ -293,7 +293,7 @@ yeccpars2_6_(__Stack0) ->
 yeccpars2_7_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin
-   { unary_expr , { not __2 } }
+   { not_ , __2 , extract ( __1 ) }
   end | __Stack].
 
 
