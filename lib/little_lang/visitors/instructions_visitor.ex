@@ -9,14 +9,27 @@ defmodule LittleLang.Visitors.InstructionsVisitor do
     instructions
   end
 
-  defp visit(visitor, {:bool_expr, expression}) do
-    visit(visitor, expression)
+  defp visit(visitor, {:bool_expr, expr}) do
+    visitor = visit(visitor, expr)
+    %__MODULE__{visitor | instructions: visitor.instructions ++ [["bool_expr"]]}
+  end
+
+  defp visit(visitor, {:expression, expr}) do
+    visit(visitor, expr)
+  end
+
+  defp visit(visitor, {:unary_expr, expr}) do
+    visit(visitor, expr)
+  end
+
+  defp visit(visitor, {:basic_expr, expr}) do
+    visit(visitor, expr)
   end
 
   defp visit(
          %__MODULE__{instructions: instructions} = visitor,
-         {:expression, {:identifier, identifier}}
+         {:identifier, identifier}
        ) do
-    %__MODULE__{visitor | instructions: instructions ++ [["load", identifier], ["bool_expr"]]}
+    %__MODULE__{visitor | instructions: instructions ++ [["load", identifier]]}
   end
 end

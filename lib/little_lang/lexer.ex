@@ -8,12 +8,16 @@ defmodule LittleLang.Lexer do
   Lex a string of characters into a list of tokens.
   """
   def process(string) do
-    {:ok, tokens, _} =
-      string
-      |> String.to_charlist()
-      |> :little_lang_lexer.string()
+    string
+    |> String.to_charlist()
+    |> :little_lang_lexer.string()
+    |> case do
+      {:ok, tokens, _} ->
+        {:ok, tokens}
 
-    {:ok, tokens}
+      {:error, {line, _lexer, {:illegal, char}}, _} ->
+        {:error, :invalid_char, "Invalid character '#{char}' found on line #{line}"}
+    end
   end
 
   @spec process!(string :: binary()) :: list()

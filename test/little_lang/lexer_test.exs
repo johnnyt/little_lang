@@ -9,6 +9,20 @@ defmodule LittleLang.LexerTest do
     assert [{:identifier, 1, "true"}] = Lexer.process!("true")
   end
 
+  test "lexes and removes whitespace" do
+    assert {:ok, [{:identifier, 1, "true"}]} = Lexer.process(" true")
+    assert {:ok, [{:identifier, 1, "true"}]} = Lexer.process("true\t")
+    assert {:ok, [{:identifier, 1, "true"}]} = Lexer.process("\rtrue\n")
+    assert {:ok, [{:identifier, 1, "true"}]} = Lexer.process("  \t \r\t true\r\n\t  \t")
+
+    assert {:ok, [{:identifier, 1, "true"}, {:identifier, 1, "false"}]} =
+             Lexer.process("true\t false")
+  end
+
+  test "lexes and removes comments" do
+    assert {:ok, [{:identifier, 1, "true"}]} = Lexer.process("true # Single line comment")
+  end
+
   test "lexes identifiers" do
     assert {:ok, [{:identifier, 1, "true"}]} = Lexer.process("true")
     assert {:ok, [{:identifier, 1, "false"}]} = Lexer.process("false")
@@ -20,47 +34,13 @@ defmodule LittleLang.LexerTest do
   end
 
   test "does not lex invalid identifiers" do
-    refute {:ok, [{:identifier, 1, "1var"}]} == Lexer.process("1var")
-  end
-
-  test "lexes integer" do
-    assert {:ok, [{:int_lit, 1, 1}]} = Lexer.process("1")
-    assert {:ok, [{:int_lit, 1, 42}]} = Lexer.process("42")
-    assert {:ok, [{:int_lit, 1, 314_159_265_358_979_323}]} = Lexer.process("314159265358979323")
-  end
-
-  test "lexes and removes whitespace" do
-    assert {:ok, [{:int_lit, 1, 1}]} = Lexer.process(" 1")
-    assert {:ok, [{:int_lit, 1, 1}]} = Lexer.process("1\t")
-    assert {:ok, [{:int_lit, 1, 1}]} = Lexer.process("\r1\n")
-    assert {:ok, [{:int_lit, 1, 1}]} = Lexer.process("  \t \r\t 1\r\n\t  \t")
-
-    assert {:ok, [{:int_lit, 1, 42}, {:int_lit, 1, 43}]} = Lexer.process("42\t43")
-  end
-
-  test "lexes and removes comments" do
-    assert {:ok, [{:int_lit, 1, 42}]} = Lexer.process("42 # Single line comment")
+    assert {:error, :invalid_char, _message} = Lexer.process("1var")
   end
 
   test "lexes unary operators" do
-    assert {:ok, [{:op, 1, :+}]} = Lexer.process("+")
-    assert {:ok, [{:op, 1, :-}]} = Lexer.process("-")
-    assert {:ok, [{:op, 1, :!}]} = Lexer.process("!")
-    assert {:ok, [{:op, 1, :not}]} = Lexer.process("not")
+    assert {:ok, [{:bang, 1, :!}]} = Lexer.process("!")
+    assert {:ok, [{:not_, 1, :not}]} = Lexer.process("not")
 
-    assert {:ok, [{:op, 1, :-}, {:int_lit, 1, 42}]} = Lexer.process("-42")
-  end
-
-  test "lexes binary operators" do
-    assert {:ok, [{:op, 1, :=}]} = Lexer.process("=")
-    assert {:ok, [{:op, 1, :!=}]} = Lexer.process("!=")
-    assert {:ok, [{:op, 1, :>}]} = Lexer.process(">")
-    assert {:ok, [{:op, 1, :>=}]} = Lexer.process(">=")
-    assert {:ok, [{:op, 1, :<}]} = Lexer.process("<")
-    assert {:ok, [{:op, 1, :<=}]} = Lexer.process("<=")
-    assert {:ok, [{:op, 1, :is}]} = Lexer.process("is")
-    assert {:ok, [{:op, 1, :"is not"}]} = Lexer.process("is not")
-
-    assert {:ok, [{:int_lit, 1, 42}, {:op, 1, :=}, {:int_lit, 1, 42}]} = Lexer.process("42 = 42")
+    assert {:ok, [{:bang, 1, :!}, {:identifier, 1, "true"}]} = Lexer.process("!true")
   end
 end
