@@ -209,11 +209,11 @@ yeccpars2_0(_, _, _, _, T, _, _) ->
 
 yeccpars2_1(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  NewStack = yeccpars2_1_(Stack),
- yeccgoto_expression(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
+ 'yeccgoto_\'Expression\''(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
 
 yeccpars2_2(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  NewStack = yeccpars2_2_(Stack),
- yeccgoto_bool_expr(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
+ 'yeccgoto_\'BoolExpr\''(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
 
 -dialyzer({nowarn_function, yeccpars2_3/7}).
 yeccpars2_3(_S, '$end', _Ss, Stack, _T, _Ts, _Tzr) ->
@@ -223,37 +223,37 @@ yeccpars2_3(_, _, _, _, T, _, _) ->
 
 yeccpars2_4(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  NewStack = yeccpars2_4_(Stack),
- yeccgoto_unary_expr(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
+ 'yeccgoto_\'UnaryExpr\''(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
 
 %% yeccpars2_5: see yeccpars2_0
 
 yeccpars2_6(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  NewStack = yeccpars2_6_(Stack),
- yeccgoto_basic_expr(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
+ 'yeccgoto_\'BasicExpr\''(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
 
 yeccpars2_7(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  [_|Nss] = Ss,
  NewStack = yeccpars2_7_(Stack),
- yeccgoto_unary_expr(hd(Nss), Cat, Nss, NewStack, T, Ts, Tzr).
+ 'yeccgoto_\'UnaryExpr\''(hd(Nss), Cat, Nss, NewStack, T, Ts, Tzr).
 
--dialyzer({nowarn_function, yeccgoto_basic_expr/7}).
-yeccgoto_basic_expr(0=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
+-dialyzer({nowarn_function, 'yeccgoto_\'BasicExpr\''/7}).
+'yeccgoto_\'BasicExpr\''(0=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_4(_S, Cat, Ss, Stack, T, Ts, Tzr);
-yeccgoto_basic_expr(5=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
+'yeccgoto_\'BasicExpr\''(5=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_4(_S, Cat, Ss, Stack, T, Ts, Tzr).
 
--dialyzer({nowarn_function, yeccgoto_bool_expr/7}).
-yeccgoto_bool_expr(0, Cat, Ss, Stack, T, Ts, Tzr) ->
+-dialyzer({nowarn_function, 'yeccgoto_\'BoolExpr\''/7}).
+'yeccgoto_\'BoolExpr\''(0, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_3(3, Cat, Ss, Stack, T, Ts, Tzr).
 
--dialyzer({nowarn_function, yeccgoto_expression/7}).
-yeccgoto_expression(0=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
+-dialyzer({nowarn_function, 'yeccgoto_\'Expression\''/7}).
+'yeccgoto_\'Expression\''(0=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_2(_S, Cat, Ss, Stack, T, Ts, Tzr).
 
--dialyzer({nowarn_function, yeccgoto_unary_expr/7}).
-yeccgoto_unary_expr(0=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
+-dialyzer({nowarn_function, 'yeccgoto_\'UnaryExpr\''/7}).
+'yeccgoto_\'UnaryExpr\''(0=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_1(_S, Cat, Ss, Stack, T, Ts, Tzr);
-yeccgoto_unary_expr(5=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
+'yeccgoto_\'UnaryExpr\''(5=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_7(_S, Cat, Ss, Stack, T, Ts, Tzr).
 
 -compile({inline,yeccpars2_1_/1}).

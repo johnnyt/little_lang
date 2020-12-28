@@ -39,20 +39,20 @@
 % Expression   = identifier | unary_op Expression.
 
 
-Nonterminals basic_expr bool_expr expression unary_expr.
+Nonterminals BasicExpr BoolExpr Expression UnaryExpr.
 
 Terminals bang identifier.
 
-Rootsymbol bool_expr.
+Rootsymbol BoolExpr.
 
-bool_expr -> expression : {bool_expr, '$1'}.
+BoolExpr -> Expression : {bool_expr, '$1'}.
 
-expression -> unary_expr : {expression, '$1'}.
+Expression -> UnaryExpr : {expression, '$1'}.
 
-unary_expr -> bang unary_expr : {not_, '$2', extract('$1')}.
-unary_expr -> basic_expr : {unary_expr, '$1'}.
+UnaryExpr -> bang UnaryExpr : {not_, '$2', extract('$1')}.
+UnaryExpr -> BasicExpr : {unary_expr, '$1'}.
 
-basic_expr -> identifier : {basic_expr, extract('$1')}.
+BasicExpr -> identifier : {basic_expr, extract('$1')}.
 
 Erlang code.
 
