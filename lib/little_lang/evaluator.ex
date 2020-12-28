@@ -81,13 +81,15 @@ defmodule LittleLang.Evaluator do
       when is_boolean(head),
       do: evaluator
 
-  # The top of the stack is NOT a boolean - return undefined
+  # The top of the stack is NOT a boolean - replace with undefined
   def process_instruction(
         %__MODULE__{processing: ["bool_expr"], stack: [_invalid_head | rest]} = evaluator
       ) do
     # do nothing for now
     %__MODULE__{evaluator | stack: [@undefined | rest]}
   end
+
+  # === Private helpers
 
   # Done processing instructions - return the top of the stack
   defp process_next_instruction(%__MODULE__{
