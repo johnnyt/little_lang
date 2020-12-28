@@ -7,15 +7,23 @@ defmodule LittleLang.Visitors.StringVisitor do
     visit(expression)
   end
 
-  defp visit({:expression, {:unary_expr, unary_expr}}) do
-    visit(unary_expr)
+  defp visit({:expression, expr}) do
+    visit(expr)
   end
 
-  defp visit({:unary_expr, {:basic_expr, basic_expr}}) do
-    visit(basic_expr)
+  defp visit({:unary_expr, expr}) do
+    visit(expr)
   end
 
-  defp visit({:basic_expr, {:identifier, identifier}}) do
+  defp visit({:basic_expr, expr}) do
+    visit(expr)
+  end
+
+  defp visit({:identifier, identifier}) do
     identifier
+  end
+
+  defp visit({:not_, unary_expr, {_unary_op, not_string}}) do
+    "#{not_string}#{visit(unary_expr)}"
   end
 end

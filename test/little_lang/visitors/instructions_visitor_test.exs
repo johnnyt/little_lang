@@ -13,4 +13,15 @@ defmodule LittleLang.Visitors.InstructionsVisitorTest do
              ["bool_expr"]
            ] = InstructionsVisitor.accept(ast)
   end
+
+  test "unary_op boolean" do
+    source = "!true"
+    {:ok, ast} = Parser.process(source)
+
+    assert [
+             ["load", "true"],
+             ["not"],
+             ["bool_expr"]
+           ] = InstructionsVisitor.accept(ast)
+  end
 end
