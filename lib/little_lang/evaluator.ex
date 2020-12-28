@@ -51,6 +51,28 @@ defmodule LittleLang.Evaluator do
     |> process_next_instruction()
   end
 
+  # jtrue
+  #
+  # If the top of the stack is true, increase the instruction_pointer by count
+  # Otherwise remove the top of the stack
+  def process_instruction(
+        %__MODULE__{
+          processing: ["jtrue", count],
+          instruction_pointer: ip,
+          stack: [true | _rest]
+        } = evaluator
+      ) do
+    %__MODULE__{evaluator | instruction_pointer: ip + count}
+  end
+
+  def process_instruction(
+        %__MODULE__{processing: ["jtrue", _count], stack: [_top | rest_of_stack]} = evaluator
+      ) do
+    %__MODULE__{evaluator | stack: rest_of_stack}
+  end
+
+  # not
+  #
   # If the top of the stack is a boolean, replace it with the inverse.
   # Otherwise replace it with undefined
   def process_instruction(
@@ -66,6 +88,8 @@ defmodule LittleLang.Evaluator do
     %__MODULE__{evaluator | stack: [:undefined | rest_of_stack]}
   end
 
+  # load
+  #
   # Load the identifier from the context and push it onto the stack
   def process_instruction(
         %__MODULE__{processing: ["load", identifier], context: context, stack: stack} = evaluator
@@ -74,6 +98,8 @@ defmodule LittleLang.Evaluator do
     %__MODULE__{evaluator | stack: [value | stack]}
   end
 
+  # bool_expr
+  #
   # If the top of the stack is a boolean, that will be used as the final value
   def process_instruction(
         %__MODULE__{processing: ["bool_expr"], stack: [head | _rest]} = evaluator
