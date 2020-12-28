@@ -11,6 +11,10 @@ defmodule LittleLang.EvaluatorTest do
       assert %{"false" => false} = Evaluator.build_context()
     end
 
+    test "includes undefined" do
+      assert %{"undefined" => :undefined} = Evaluator.build_context()
+    end
+
     test "merges builds over provided context" do
       assert %{"true" => true} = Evaluator.build_context(%{"true" => "foo"})
     end
