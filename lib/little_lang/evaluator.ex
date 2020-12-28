@@ -7,6 +7,8 @@ defmodule LittleLang.Evaluator do
 
   @type bool_or_undefined :: boolean() | :undefined
 
+  @undefined :undefined
+
   defstruct [
     :instructions,
     :instructions_length,
@@ -24,7 +26,7 @@ defmodule LittleLang.Evaluator do
     Map.merge(map, %{
       "true" => true,
       "false" => false,
-      "undefined" => :undefined
+      "undefined" => @undefined
     })
   end
 
@@ -41,6 +43,22 @@ defmodule LittleLang.Evaluator do
     |> process_next_instruction()
   end
 
+  # If the top of the stack is a boolean, replace it with the inverse.
+  # Otherwise replace it with undefined
+  def process_instruction(
+        %__MODULE__{processing: ["not"], stack: [top | rest_of_stack]} = evaluator
+      )
+      when is_boolean(top) do
+    %__MODULE__{evaluator | stack: [!top | rest_of_stack]}
+  end
+
+  def process_instruction(
+        %__MODULE__{processing: ["not"], stack: [_invalid_top | rest_of_stack]} = evaluator
+      ) do
+    %__MODULE__{evaluator | stack: [:undefined | rest_of_stack]}
+  end
+
+  # Load the identifier from the context and push it onto the stack
   def process_instruction(
         %__MODULE__{processing: ["load", identifier], context: context, stack: stack} = evaluator
       ) do
@@ -48,7 +66,7 @@ defmodule LittleLang.Evaluator do
     %__MODULE__{evaluator | stack: [value | stack]}
   end
 
-  # If the top of the stack is a boolean - return that
+  # If the top of the stack is a boolean, that will be used as the final value
   def process_instruction(
         %__MODULE__{processing: ["bool_expr"], stack: [head | _rest]} = evaluator
       )
@@ -56,9 +74,11 @@ defmodule LittleLang.Evaluator do
       do: evaluator
 
   # The top of the stack is NOT a boolean - return undefined
-  def process_instruction(%__MODULE__{processing: ["bool_expr"]} = evaluator) do
+  def process_instruction(
+        %__MODULE__{processing: ["bool_expr"], stack: [_invalid_head | rest]} = evaluator
+      ) do
     # do nothing for now
-    %__MODULE__{evaluator | stack: [:undefined]}
+    %__MODULE__{evaluator | stack: [@undefined | rest]}
   end
 
   # Done processing instructions - return the top of the stack
