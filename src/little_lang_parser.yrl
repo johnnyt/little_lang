@@ -28,32 +28,37 @@
 %
 % BoolExpr     = Expression .
 % Expression   = UnaryExpr .
-% UnaryExpr    = BasicExpr | unary_op UnaryExpr.
-% BasicExpr    = Operand .
-% Operand      = NamedOperand .
-% NamedOperand = identifier .
-%
-% =>
+% UnaryExpr    = BasicExpr | unary_op UnaryExpr .
+% BasicExpr    = identifier
+
+
+% Third step - BinaryExpr
 %
 % BoolExpr     = Expression .
-% Expression   = identifier | unary_op Expression.
+% Expression   = UnaryExpr | Expression binary_op Expression .
+% UnaryExpr    = BasicExpr | unary_op UnaryExpr .
+% BasicExpr    = identifier
 
+Nonterminals BasicExpr BoolExpr Expression UnaryExpr logical_op unary_op.
 
-Nonterminals BasicExpr BoolExpr Expression UnaryExpr.
-
-Terminals bang identifier not_.
+Terminals bang identifier not_ or_.
 
 Rootsymbol BoolExpr.
 
 BoolExpr -> Expression : {bool_expr, '$1'}.
 
 Expression -> UnaryExpr : {expression, '$1'}.
+Expression -> Expression logical_op Expression : {expression, '$1', '$3', '$2'}.
 
-UnaryExpr -> not_ UnaryExpr : {not_, '$2', extract('$1')}.
-UnaryExpr -> bang UnaryExpr : {not_, '$2', extract('$1')}.
+UnaryExpr -> unary_op UnaryExpr : {not_, '$2', '$1'}.
 UnaryExpr -> BasicExpr : {unary_expr, '$1'}.
 
 BasicExpr -> identifier : {basic_expr, extract('$1')}.
+
+unary_op -> not_ : extract('$1').
+unary_op -> bang : extract('$1').
+
+logical_op -> or_ : extract('$1').
 
 Erlang code.
 

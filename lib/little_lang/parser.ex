@@ -19,4 +19,14 @@ defmodule LittleLang.Parser do
     input
     |> :little_lang_parser.parse()
   end
+
+  @spec process!(tokens :: list()) :: map()
+  @doc """
+  Lex a string of characters into an unwrapped list of tokens.
+  """
+  def process!(tokens) do
+    case process(tokens) do
+      {:ok, ast} -> ast
+    end
+  end
 end
