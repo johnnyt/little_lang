@@ -7,8 +7,14 @@ defmodule LittleLang.Visitors.StringVisitor do
     visit(expression)
   end
 
+  # Unary Expr
   defp visit({:expression, expr}) do
     visit(expr)
+  end
+
+  # Binary Expr
+  defp visit({:expression, left, right, {_op_type, op_string}}) do
+    "#{visit(left)} #{op_string} #{visit(right)}"
   end
 
   defp visit({:unary_expr, expr}) do

@@ -19,4 +19,10 @@ defmodule LittleLang.Visitors.StringVisitorTest do
     {:ok, ast} = Parser.process(source)
     assert source == StringVisitor.accept(ast)
   end
+
+  test "identifier logical_op identifier" do
+    source = "a or b"
+    {:ok, ast} = Parser.process(source)
+    assert source == StringVisitor.accept(ast)
+  end
 end

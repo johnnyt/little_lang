@@ -14,6 +14,19 @@ defmodule LittleLang.Visitors.InstructionsVisitor do
     %__MODULE__{visitor | instructions: visitor.instructions ++ [["bool_expr"]]}
   end
 
+  # BinaryExpr
+  defp visit(visitor, {:expression, left, right, {:or_, _image}}) do
+    left_visitor = visit(visitor, left)
+
+    %__MODULE__{
+      left_visitor
+      | instructions:
+          left_visitor.instructions ++ [["jtrue", num_instructions(left_visitor, right)]]
+    }
+    |> visit(right)
+  end
+
+  # UnaryExpr
   defp visit(visitor, {:expression, expr}) do
     visit(visitor, expr)
   end
@@ -36,5 +49,10 @@ defmodule LittleLang.Visitors.InstructionsVisitor do
   defp visit(visitor, {:not_, unary_expr, {_unary_op, _string}}) do
     visitor = visit(visitor, unary_expr)
     %__MODULE__{visitor | instructions: visitor.instructions ++ [["not"]]}
+  end
+
+  defp num_instructions(visitor, ast) do
+    count_visitor = visit(visitor, ast)
+    length(count_visitor.instructions) - length(visitor.instructions)
   end
 end
