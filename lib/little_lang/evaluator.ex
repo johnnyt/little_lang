@@ -30,16 +30,24 @@ defmodule LittleLang.Evaluator do
     })
   end
 
+  @doc """
+  Creates a new struct based on the provided instructions and context.
+  """
+  def new(instructions, context \\ %{}) when is_list(instructions) and is_map(context) do
+    %__MODULE__{
+      context: build_context(context),
+      instructions: instructions,
+      instructions_length: length(instructions)
+    }
+  end
+
   @spec process(instructions :: list()) :: bool_or_undefined
   @doc """
   Evaluate the list of instructions and returns a boolean
   """
-  def process(instructions) when is_list(instructions) do
-    %__MODULE__{
-      context: build_context(),
-      instructions: instructions,
-      instructions_length: length(instructions)
-    }
+  def process(instructions, context \\ %{}) when is_list(instructions) and is_map(context) do
+    instructions
+    |> new(context)
     |> process_next_instruction()
   end
 
