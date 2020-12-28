@@ -23,5 +23,14 @@ defmodule LittleLang.Visitors.InstructionsVisitorTest do
              ["not"],
              ["bool_expr"]
            ] = InstructionsVisitor.accept(ast)
+
+    source = "not true"
+    {:ok, ast} = Parser.process(source)
+
+    assert [
+             ["load", "true"],
+             ["not"],
+             ["bool_expr"]
+           ] = InstructionsVisitor.accept(ast)
   end
 end

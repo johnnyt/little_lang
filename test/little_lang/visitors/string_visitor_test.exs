@@ -14,5 +14,9 @@ defmodule LittleLang.Visitors.StringVisitorTest do
     source = "!true"
     {:ok, ast} = Parser.process(source)
     assert source == StringVisitor.accept(ast)
+
+    source = "not true"
+    {:ok, ast} = Parser.process(source)
+    assert source == StringVisitor.accept(ast)
   end
 end

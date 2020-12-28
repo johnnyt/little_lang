@@ -1,8 +1,7 @@
 -module(little_lang_parser).
 -export([parse/1, parse_and_scan/1, format_error/1]).
--file("src/little_lang_parser.yrl", 57).
+-file("src/little_lang_parser.yrl", 58).
 
-% extract_value({_,V}) -> V.
 extract({Type, _Line, Value}) -> {Type, Value}.
 
 -file("/Users/johnnyt/.asdf/installs/erlang/23.0/lib/parsetools-2.2/include/yeccpre.hrl", 0).
@@ -177,7 +176,7 @@ yecctoken2string(Other) ->
 
 
 
--file("src/little_lang_parser.erl", 180).
+-file("src/little_lang_parser.erl", 179).
 
 -dialyzer({nowarn_function, yeccpars2/7}).
 yeccpars2(0=S, Cat, Ss, Stack, T, Ts, Tzr) ->
@@ -194,8 +193,12 @@ yeccpars2(5=S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_0(S, Cat, Ss, Stack, T, Ts, Tzr);
 yeccpars2(6=S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_6(S, Cat, Ss, Stack, T, Ts, Tzr);
-%% yeccpars2(7=S, Cat, Ss, Stack, T, Ts, Tzr) ->
-%%  yeccpars2_7(S, Cat, Ss, Stack, T, Ts, Tzr);
+yeccpars2(7=S, Cat, Ss, Stack, T, Ts, Tzr) ->
+ yeccpars2_0(S, Cat, Ss, Stack, T, Ts, Tzr);
+%% yeccpars2(8=S, Cat, Ss, Stack, T, Ts, Tzr) ->
+%%  yeccpars2_8(S, Cat, Ss, Stack, T, Ts, Tzr);
+%% yeccpars2(9=S, Cat, Ss, Stack, T, Ts, Tzr) ->
+%%  yeccpars2_9(S, Cat, Ss, Stack, T, Ts, Tzr);
 yeccpars2(Other, _, _, _, _, _, _) ->
  erlang:error({yecc_bug,"1.4",{missing_state_in_action_table, Other}}).
 
@@ -204,6 +207,8 @@ yeccpars2_0(S, bang, Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 5, Ss, Stack, T, Ts, Tzr);
 yeccpars2_0(S, identifier, Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 6, Ss, Stack, T, Ts, Tzr);
+yeccpars2_0(S, not_, Ss, Stack, T, Ts, Tzr) ->
+ yeccpars1(S, 7, Ss, Stack, T, Ts, Tzr);
 yeccpars2_0(_, _, _, _, T, _, _) ->
  yeccerror(T).
 
@@ -231,15 +236,24 @@ yeccpars2_6(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  NewStack = yeccpars2_6_(Stack),
  'yeccgoto_\'BasicExpr\''(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
 
-yeccpars2_7(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
+%% yeccpars2_7: see yeccpars2_0
+
+yeccpars2_8(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  [_|Nss] = Ss,
- NewStack = yeccpars2_7_(Stack),
+ NewStack = yeccpars2_8_(Stack),
+ 'yeccgoto_\'UnaryExpr\''(hd(Nss), Cat, Nss, NewStack, T, Ts, Tzr).
+
+yeccpars2_9(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
+ [_|Nss] = Ss,
+ NewStack = yeccpars2_9_(Stack),
  'yeccgoto_\'UnaryExpr\''(hd(Nss), Cat, Nss, NewStack, T, Ts, Tzr).
 
 -dialyzer({nowarn_function, 'yeccgoto_\'BasicExpr\''/7}).
 'yeccgoto_\'BasicExpr\''(0=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_4(_S, Cat, Ss, Stack, T, Ts, Tzr);
 'yeccgoto_\'BasicExpr\''(5=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
+ yeccpars2_4(_S, Cat, Ss, Stack, T, Ts, Tzr);
+'yeccgoto_\'BasicExpr\''(7=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_4(_S, Cat, Ss, Stack, T, Ts, Tzr).
 
 -dialyzer({nowarn_function, 'yeccgoto_\'BoolExpr\''/7}).
@@ -254,7 +268,9 @@ yeccpars2_7(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
 'yeccgoto_\'UnaryExpr\''(0=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_1(_S, Cat, Ss, Stack, T, Ts, Tzr);
 'yeccgoto_\'UnaryExpr\''(5=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
- yeccpars2_7(_S, Cat, Ss, Stack, T, Ts, Tzr).
+ yeccpars2_9(_S, Cat, Ss, Stack, T, Ts, Tzr);
+'yeccgoto_\'UnaryExpr\''(7=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
+ yeccpars2_8(_S, Cat, Ss, Stack, T, Ts, Tzr).
 
 -compile({inline,yeccpars2_1_/1}).
 -file("src/little_lang_parser.yrl", 46).
@@ -273,7 +289,7 @@ yeccpars2_2_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_4_/1}).
--file("src/little_lang_parser.yrl", 49).
+-file("src/little_lang_parser.yrl", 50).
 yeccpars2_4_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -281,16 +297,24 @@ yeccpars2_4_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_6_/1}).
--file("src/little_lang_parser.yrl", 51).
+-file("src/little_lang_parser.yrl", 52).
 yeccpars2_6_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
    { basic_expr , extract ( __1 ) }
   end | __Stack].
 
--compile({inline,yeccpars2_7_/1}).
+-compile({inline,yeccpars2_8_/1}).
 -file("src/little_lang_parser.yrl", 48).
-yeccpars2_7_(__Stack0) ->
+yeccpars2_8_(__Stack0) ->
+ [__2,__1 | __Stack] = __Stack0,
+ [begin
+   { not_ , __2 , extract ( __1 ) }
+  end | __Stack].
+
+-compile({inline,yeccpars2_9_/1}).
+-file("src/little_lang_parser.yrl", 49).
+yeccpars2_9_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin
    { not_ , __2 , extract ( __1 ) }

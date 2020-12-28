@@ -28,4 +28,12 @@ defmodule LittleLang.Evaluator.NotTest do
                ["bool_expr"]
              ])
   end
+
+  test "not operation for non-booleans results in undefined" do
+    assert :undefined ==
+             Evaluator.process([
+               ["load", "foo"],
+               ["not"]
+             ])
+  end
 end
