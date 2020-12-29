@@ -29,11 +29,11 @@ defmodule LittleLang.Visitors.StringVisitor do
     identifier
   end
 
-  defp visit({:not_, unary_expr, {:bang, not_string}}) do
+  defp visit({:not, unary_expr, {:bang, not_string}}) do
     "#{not_string}#{visit(unary_expr)}"
   end
 
-  defp visit({:not_, unary_expr, {:not_, not_string}}) do
+  defp visit({:not, unary_expr, {:not, not_string}}) do
     "#{not_string} #{visit(unary_expr)}"
   end
 end

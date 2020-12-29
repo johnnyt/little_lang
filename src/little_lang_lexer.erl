@@ -485,12 +485,12 @@ yyaction_1(TokenChars, TokenLine) ->
 -compile({inline,yyaction_2/2}).
 -file("src/little_lang_lexer.xrl", 12).
 yyaction_2(TokenChars, TokenLine) ->
-     { token, { not_, TokenLine, list_to_binary (TokenChars) } } .
+     { token, { 'not', TokenLine, list_to_binary (TokenChars) } } .
 
 -compile({inline,yyaction_3/2}).
 -file("src/little_lang_lexer.xrl", 13).
 yyaction_3(TokenChars, TokenLine) ->
-     { token, { or_, TokenLine, list_to_binary (TokenChars) } } .
+     { token, { 'or', TokenLine, list_to_binary (TokenChars) } } .
 
 -compile({inline,yyaction_4/2}).
 -file("src/little_lang_lexer.xrl", 14).

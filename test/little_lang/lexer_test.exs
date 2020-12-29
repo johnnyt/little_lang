@@ -42,11 +42,11 @@ defmodule LittleLang.LexerTest do
 
   test "lexes unary operators" do
     assert [{:bang, 1, "!"}] = Lexer.process!("!")
-    assert [{:not_, 1, "not"}] = Lexer.process!("not")
+    assert [{:not, 1, "not"}] = Lexer.process!("not")
     assert [{:bang, 1, "!"}, {:identifier, 1, "true"}] = Lexer.process!("!true")
   end
 
   test "lexes binary operators" do
-    assert [{:or_, 1, "or"}] = Lexer.process!("or")
+    assert [{:or, 1, "or"}] = Lexer.process!("or")
   end
 end

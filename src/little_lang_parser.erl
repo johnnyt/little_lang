@@ -213,7 +213,7 @@ yeccpars2_0(S, bang, Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 6, Ss, Stack, T, Ts, Tzr);
 yeccpars2_0(S, identifier, Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 7, Ss, Stack, T, Ts, Tzr);
-yeccpars2_0(S, not_, Ss, Stack, T, Ts, Tzr) ->
+yeccpars2_0(S, 'not', Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 8, Ss, Stack, T, Ts, Tzr);
 yeccpars2_0(_, _, _, _, T, _, _) ->
  yeccerror(T).
@@ -224,7 +224,7 @@ yeccpars2_2(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  NewStack = yeccpars2_2_(Stack),
  'yeccgoto_\'Expression\''(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
 
-yeccpars2_3(S, or_, Ss, Stack, T, Ts, Tzr) ->
+yeccpars2_3(S, 'or', Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 10, Ss, Stack, T, Ts, Tzr);
 yeccpars2_3(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  NewStack = yeccpars2_3_(Stack),
@@ -258,7 +258,7 @@ yeccpars2_10(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  NewStack = yeccpars2_10_(Stack),
  yeccgoto_logical_op(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
 
-yeccpars2_11(S, or_, Ss, Stack, T, Ts, Tzr) ->
+yeccpars2_11(S, 'or', Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 10, Ss, Stack, T, Ts, Tzr);
 yeccpars2_11(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  [_,_|Nss] = Ss,
@@ -379,7 +379,7 @@ yeccpars2_11_(__Stack0) ->
 yeccpars2_12_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin
-   { not_ , __2 , __1 }
+   { 'not' , __2 , __1 }
   end | __Stack].
 
 
