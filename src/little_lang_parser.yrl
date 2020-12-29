@@ -50,10 +50,10 @@ BoolExpr -> Expression : {bool_expr, '$1'}.
 Expression -> UnaryExpr : {expression, '$1'}.
 Expression -> Expression logical_op Expression : {expression, '$1', '$3', '$2'}.
 
-UnaryExpr -> unary_op UnaryExpr : {'not', '$2', '$1'}.
-UnaryExpr -> BasicExpr : {unary_expr, '$1'}.
+UnaryExpr -> unary_op UnaryExpr : {unary_expr, '$2', '$1'}.
+UnaryExpr -> BasicExpr : '$1'.
 
-BasicExpr -> identifier : {basic_expr, extract('$1')}.
+BasicExpr -> identifier : extract('$1').
 
 unary_op -> not : extract('$1').
 unary_op -> bang : extract('$1').

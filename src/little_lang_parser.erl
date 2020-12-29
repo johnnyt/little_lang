@@ -237,8 +237,7 @@ yeccpars2_4(_, _, _, _, T, _, _) ->
  yeccerror(T).
 
 yeccpars2_5(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
- NewStack = yeccpars2_5_(Stack),
- 'yeccgoto_\'UnaryExpr\''(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
+ 'yeccgoto_\'UnaryExpr\''(hd(Ss), Cat, Ss, Stack, T, Ts, Tzr).
 
 yeccpars2_6(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  NewStack = yeccpars2_6_(Stack),
@@ -326,14 +325,6 @@ yeccpars2_3_(__Stack0) ->
    { bool_expr , __1 }
   end | __Stack].
 
--compile({inline,yeccpars2_5_/1}).
--file("src/little_lang_parser.yrl", 50).
-yeccpars2_5_(__Stack0) ->
- [__1 | __Stack] = __Stack0,
- [begin
-   { unary_expr , __1 }
-  end | __Stack].
-
 -compile({inline,yeccpars2_6_/1}).
 -file("src/little_lang_parser.yrl", 55).
 yeccpars2_6_(__Stack0) ->
@@ -347,7 +338,7 @@ yeccpars2_6_(__Stack0) ->
 yeccpars2_7_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
-   { basic_expr , extract ( __1 ) }
+   extract ( __1 )
   end | __Stack].
 
 -compile({inline,yeccpars2_8_/1}).
@@ -379,7 +370,7 @@ yeccpars2_11_(__Stack0) ->
 yeccpars2_12_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin
-   { 'not' , __2 , __1 }
+   { unary_expr , __2 , __1 }
   end | __Stack].
 
 
