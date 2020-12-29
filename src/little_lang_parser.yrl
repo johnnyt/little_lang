@@ -44,6 +44,7 @@ Nonterminals BasicExpr BoolExpr Expression UnaryExpr logical_op unary_op.
 Terminals bang identifier not or.
 
 Rootsymbol BoolExpr.
+Left 100 or.
 
 BoolExpr -> Expression : {bool_expr, '$1'}.
 
