@@ -15,6 +15,8 @@ defmodule LittleLang.ParserTest do
 
     assert {:bool_expr, {:unary_expr, {:not, "not"}, {:identifier, "foo"}}} =
              Parser.process!("not foo")
+
+    assert {:bool_expr, {:unary_expr, {:minus, "-"}, {:int_lit, 42}}} = Parser.process!("-42")
   end
 
   test "parses binary expression" do

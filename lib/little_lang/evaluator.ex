@@ -89,6 +89,23 @@ defmodule LittleLang.Evaluator do
     %__MODULE__{evaluator | stack: rest_of_stack}
   end
 
+  # minus
+  #
+  # If the top of the stack is a number, replace it with the inverse (value multiplied by -1).
+  # Otherwise replace it with undefined
+  def process_instruction(
+        %__MODULE__{processing: ["minus"], stack: [top | rest_of_stack]} = evaluator
+      )
+      when is_integer(top) do
+    %__MODULE__{evaluator | stack: [top * -1 | rest_of_stack]}
+  end
+
+  def process_instruction(
+        %__MODULE__{processing: ["minus"], stack: [_invalid_top | rest_of_stack]} = evaluator
+      ) do
+    %__MODULE__{evaluator | stack: [:undefined | rest_of_stack]}
+  end
+
   # not
   #
   # If the top of the stack is a boolean, replace it with the inverse.

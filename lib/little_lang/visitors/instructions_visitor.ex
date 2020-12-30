@@ -39,10 +39,22 @@ defmodule LittleLang.Visitors.InstructionsVisitor do
     %__MODULE__{visitor | instructions: instructions ++ [["load", identifier]]}
   end
 
+  defp visit(
+         %__MODULE__{instructions: instructions} = visitor,
+         {:int_lit, int}
+       ) do
+    %__MODULE__{visitor | instructions: instructions ++ [["lit", int]]}
+  end
+
   defp visit(visitor, {:unary_expr, {unary_op, _image}, unary_expr})
        when unary_op in [:bang, :not] do
     visitor = visit(visitor, unary_expr)
     %__MODULE__{visitor | instructions: visitor.instructions ++ [["not"]]}
+  end
+
+  defp visit(visitor, {:unary_expr, {:minus, _image}, unary_expr}) do
+    visitor = visit(visitor, unary_expr)
+    %__MODULE__{visitor | instructions: visitor.instructions ++ [["minus"]]}
   end
 
   defp visit(visitor, {:call_expr, {:identifier, function}, arguments}) do

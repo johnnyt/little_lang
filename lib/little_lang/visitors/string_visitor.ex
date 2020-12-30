@@ -15,12 +15,20 @@ defmodule LittleLang.Visitors.StringVisitor do
     "#{bool}"
   end
 
+  defp visit({:int_lit, int}) do
+    "#{int}"
+  end
+
   defp visit({:identifier, identifier_image}) do
     identifier_image
   end
 
   defp visit({:unary_expr, {:bang, not_image}, unary_expr}) do
     "#{not_image}#{visit(unary_expr)}"
+  end
+
+  defp visit({:unary_expr, {:minus, minus_image}, unary_expr}) do
+    "#{minus_image}#{visit(unary_expr)}"
   end
 
   defp visit({:unary_expr, {:not, not_image}, unary_expr}) do

@@ -4,12 +4,22 @@ defmodule LittleLang.Visitors.InstructionsVisitorTest do
   alias LittleLang.Parser
   alias LittleLang.Visitors.InstructionsVisitor
 
-  test "boolean" do
+  test "boolean literal" do
     source = "true"
     {:ok, ast} = Parser.process(source)
 
     assert [
              ["lit", true],
+             ["bool_expr"]
+           ] = InstructionsVisitor.accept(ast)
+  end
+
+  test "integer literal" do
+    source = "42"
+    {:ok, ast} = Parser.process(source)
+
+    assert [
+             ["lit", 42],
              ["bool_expr"]
            ] = InstructionsVisitor.accept(ast)
   end
@@ -24,7 +34,7 @@ defmodule LittleLang.Visitors.InstructionsVisitorTest do
            ] = InstructionsVisitor.accept(ast)
   end
 
-  test "unary_op identifier" do
+  test "unary_op boolean" do
     source = "!foo"
     {:ok, ast} = Parser.process(source)
 
@@ -40,6 +50,17 @@ defmodule LittleLang.Visitors.InstructionsVisitorTest do
     assert [
              ["load", "foo"],
              ["not"],
+             ["bool_expr"]
+           ] = InstructionsVisitor.accept(ast)
+  end
+
+  test "unary_op integer" do
+    source = "-42"
+    {:ok, ast} = Parser.process(source)
+
+    assert [
+             ["lit", 42],
+             ["minus"],
              ["bool_expr"]
            ] = InstructionsVisitor.accept(ast)
   end

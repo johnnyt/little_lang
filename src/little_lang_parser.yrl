@@ -1,9 +1,9 @@
 Nonterminals
-  Arguments BasicExpr BoolExpr Expression ExpressionList LogicalOp
-  Operand UnaryExpr UnaryOp.
+  Arguments BasicExpr BoolExpr Expression ExpressionList LogicalOp Operand
+  UnaryExpr UnaryOp.
 
 Terminals
-  bang bool_lit comma identifier not or open_paren close_paren.
+  bang bool_lit comma identifier int_lit minus not or open_paren close_paren.
 
 Rootsymbol BoolExpr.
 
@@ -21,16 +21,19 @@ BasicExpr  -> Operand             : extract('$1').
 BasicExpr  -> BasicExpr Arguments : {call_expr, extract('$1'), '$2'}.
 
 Operand    -> bool_lit            : extract('$1').
+Operand    -> int_lit             : extract('$1').
 Operand    -> identifier          : extract('$1').
 
 Arguments      -> open_paren close_paren : [].
 Arguments      -> open_paren ExpressionList close_paren : '$2'.
-ExpressionList -> Expression      : ['$1'].
+ExpressionList -> Expression : ['$1'].
 ExpressionList -> Expression comma ExpressionList : ['$1' | '$3'].
 
-UnaryOp    -> not  : extract('$1').
-UnaryOp    -> bang : extract('$1').
-LogicalOp  -> or   : extract('$1').
+UnaryOp    -> bang  : extract('$1').
+UnaryOp    -> minus : extract('$1').
+UnaryOp    -> not   : extract('$1').
+
+LogicalOp  -> or    : extract('$1').
 
 Erlang code.
 

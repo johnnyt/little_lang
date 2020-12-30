@@ -4,8 +4,18 @@ defmodule LittleLang.Visitors.StringVisitorTest do
   alias LittleLang.Parser
   alias LittleLang.Visitors.StringVisitor
 
-  test "boolean" do
+  test "boolean literal" do
     source = "true"
+    {:ok, ast} = Parser.process(source)
+    assert source == StringVisitor.accept(ast)
+
+    source = "false"
+    {:ok, ast} = Parser.process(source)
+    assert source == StringVisitor.accept(ast)
+  end
+
+  test "integer literal" do
+    source = "42"
     {:ok, ast} = Parser.process(source)
     assert source == StringVisitor.accept(ast)
   end
@@ -22,6 +32,12 @@ defmodule LittleLang.Visitors.StringVisitorTest do
     assert source == StringVisitor.accept(ast)
 
     source = "not true"
+    {:ok, ast} = Parser.process(source)
+    assert source == StringVisitor.accept(ast)
+  end
+
+  test "unary_op integer" do
+    source = "-42"
     {:ok, ast} = Parser.process(source)
     assert source == StringVisitor.accept(ast)
   end

@@ -13,8 +13,15 @@ defmodule LittleLang.LexerTest do
     assert [{:bool_lit, 1, true}] = Lexer.process!("true")
   end
 
-  test "lexes true" do
+  test "lexes bool_lit" do
     assert [{:bool_lit, 1, true}] = Lexer.process!("true")
+    assert [{:bool_lit, 1, false}] = Lexer.process!("false")
+  end
+
+  test "lexes integer" do
+    assert [{:int_lit, 1, 1}] = Lexer.process!("1")
+    assert [{:int_lit, 1, 42}] = Lexer.process!("42")
+    assert [{:int_lit, 1, 314_159_265_358_979_323}] = Lexer.process!("314159265358979323")
   end
 
   test "lexes identifiers containing keyworkds" do
@@ -46,13 +53,16 @@ defmodule LittleLang.LexerTest do
   end
 
   test "does not lex invalid identifiers" do
-    assert {:error, :invalid_char, _message} = Lexer.process("1var")
+    refute {:identifier, 1, "1var"} == Lexer.process!("1var")
   end
 
   test "lexes unary operators" do
     assert [{:bang, 1, "!"}] = Lexer.process!("!")
     assert [{:not, 1, "not"}] = Lexer.process!("not")
+    assert [{:minus, 1, "-"}] = Lexer.process!("-")
+
     assert [{:bang, 1, "!"}, {:identifier, 1, "foo"}] = Lexer.process!("!foo")
+    assert [{:minus, 1, "-"}, {:int_lit, 1, 42}] = Lexer.process!("-42")
   end
 
   test "lexes binary operators" do
