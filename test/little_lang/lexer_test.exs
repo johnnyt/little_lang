@@ -6,29 +6,38 @@ defmodule LittleLang.LexerTest do
   doctest Lexer
 
   test "process returns wrapped tokens" do
-    assert {:ok, [{:identifier, 1, "true"}]} = Lexer.process("true")
+    assert {:ok, [{:bool_lit, 1, true}]} = Lexer.process("true")
   end
 
   test "process! returns unwrapped tokens" do
-    assert [{:identifier, 1, "true"}] = Lexer.process!("true")
+    assert [{:bool_lit, 1, true}] = Lexer.process!("true")
+  end
+
+  test "lexes true" do
+    assert [{:bool_lit, 1, true}] = Lexer.process!("true")
+  end
+
+  test "lexes identifiers containing keyworkds" do
+    assert [{:identifier, 1, "atrue"}] = Lexer.process!("atrue")
+    assert [{:identifier, 1, "trueA"}] = Lexer.process!("trueA")
   end
 
   test "lexes and removes whitespace" do
-    assert [{:identifier, 1, "true"}] = Lexer.process!(" true")
-    assert [{:identifier, 1, "true"}] = Lexer.process!("true\t")
-    assert [{:identifier, 1, "true"}] = Lexer.process!("\rtrue\n")
-    assert [{:identifier, 1, "true"}] = Lexer.process!("  \t \r\t true\r\n\t  \t")
+    assert [{:identifier, 1, "foo"}] = Lexer.process!(" foo")
+    assert [{:identifier, 1, "foo"}] = Lexer.process!("foo\t")
+    assert [{:identifier, 1, "foo"}] = Lexer.process!("\rfoo\n")
+    assert [{:identifier, 1, "foo"}] = Lexer.process!("  \t \r\t foo\r\n\t  \t")
 
-    assert [{:identifier, 1, "true"}, {:identifier, 1, "false"}] = Lexer.process!("true\t false")
+    assert [{:identifier, 1, "foo"}, {:identifier, 1, "bar"}] = Lexer.process!("foo\t bar")
   end
 
   test "lexes and removes comments" do
-    assert [{:identifier, 1, "true"}] = Lexer.process!("true # Single line comment")
+    assert [{:identifier, 1, "foo"}] = Lexer.process!("foo # Single line comment")
   end
 
   test "lexes identifiers" do
-    assert [{:identifier, 1, "true"}] = Lexer.process!("true")
-    assert [{:identifier, 1, "false"}] = Lexer.process!("false")
+    assert [{:identifier, 1, "foo"}] = Lexer.process!("foo")
+    assert [{:identifier, 1, "bar"}] = Lexer.process!("bar")
     assert [{:identifier, 1, "undefined"}] = Lexer.process!("undefined")
 
     assert [{:identifier, 1, "var_1"}] = Lexer.process!("var_1")
@@ -43,7 +52,7 @@ defmodule LittleLang.LexerTest do
   test "lexes unary operators" do
     assert [{:bang, 1, "!"}] = Lexer.process!("!")
     assert [{:not, 1, "not"}] = Lexer.process!("not")
-    assert [{:bang, 1, "!"}, {:identifier, 1, "true"}] = Lexer.process!("!true")
+    assert [{:bang, 1, "!"}, {:identifier, 1, "foo"}] = Lexer.process!("!foo")
   end
 
   test "lexes binary operators" do

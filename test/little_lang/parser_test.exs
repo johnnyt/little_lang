@@ -6,15 +6,15 @@ defmodule LittleLang.ParserTest do
   doctest Parser
 
   test "parses basic boolean expression" do
-    assert {:bool_expr, {:identifier, "true"}} = Parser.process!("true")
+    assert {:bool_expr, {:bool_lit, true}} = Parser.process!("true")
   end
 
   test "parses unary op and expression" do
-    assert {:bool_expr, {:unary_expr, {:bang, "!"}, {:identifier, "true"}}} =
-             Parser.process!("!true")
+    assert {:bool_expr, {:unary_expr, {:bang, "!"}, {:identifier, "foo"}}} =
+             Parser.process!("!foo")
 
-    assert {:bool_expr, {:unary_expr, {:not, "not"}, {:identifier, "true"}}} =
-             Parser.process!("not true")
+    assert {:bool_expr, {:unary_expr, {:not, "not"}, {:identifier, "foo"}}} =
+             Parser.process!("not foo")
   end
 
   test "parses binary expression" do

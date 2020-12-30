@@ -7,20 +7,24 @@ defmodule LittleLang.Visitors.StringVisitor do
     visit(expression)
   end
 
-  defp visit({:binary_expr, {_op_type, op_string}, left, right}) do
-    "#{visit(left)} #{op_string} #{visit(right)}"
+  defp visit({:binary_expr, {_op_type, op_image}, left, right}) do
+    "#{visit(left)} #{op_image} #{visit(right)}"
   end
 
-  defp visit({:identifier, identifier}) do
-    identifier
+  defp visit({:bool_lit, bool}) do
+    "#{bool}"
   end
 
-  defp visit({:unary_expr, {:bang, not_string}, unary_expr}) do
-    "#{not_string}#{visit(unary_expr)}"
+  defp visit({:identifier, identifier_image}) do
+    identifier_image
   end
 
-  defp visit({:unary_expr, {:not, not_string}, unary_expr}) do
-    "#{not_string} #{visit(unary_expr)}"
+  defp visit({:unary_expr, {:bang, not_image}, unary_expr}) do
+    "#{not_image}#{visit(unary_expr)}"
+  end
+
+  defp visit({:unary_expr, {:not, not_image}, unary_expr}) do
+    "#{not_image} #{visit(unary_expr)}"
   end
 
   defp visit({:call_expr, function, arguments}) do

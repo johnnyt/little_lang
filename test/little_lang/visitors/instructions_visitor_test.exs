@@ -4,65 +4,75 @@ defmodule LittleLang.Visitors.InstructionsVisitorTest do
   alias LittleLang.Parser
   alias LittleLang.Visitors.InstructionsVisitor
 
-  test "identifier" do
+  test "boolean" do
     source = "true"
     {:ok, ast} = Parser.process(source)
 
     assert [
-             ["load", "true"],
+             ["lit", true],
+             ["bool_expr"]
+           ] = InstructionsVisitor.accept(ast)
+  end
+
+  test "identifier" do
+    source = "foo"
+    {:ok, ast} = Parser.process(source)
+
+    assert [
+             ["load", "foo"],
              ["bool_expr"]
            ] = InstructionsVisitor.accept(ast)
   end
 
   test "unary_op identifier" do
-    source = "!true"
+    source = "!foo"
     {:ok, ast} = Parser.process(source)
 
     assert [
-             ["load", "true"],
+             ["load", "foo"],
              ["not"],
              ["bool_expr"]
            ] = InstructionsVisitor.accept(ast)
 
-    source = "not true"
+    source = "not foo"
     {:ok, ast} = Parser.process(source)
 
     assert [
-             ["load", "true"],
+             ["load", "foo"],
              ["not"],
              ["bool_expr"]
            ] = InstructionsVisitor.accept(ast)
   end
 
   test "identifier or identifier" do
-    source = "true or false"
+    source = "foo or bar"
     {:ok, ast} = Parser.process(source)
 
     assert [
-             ["load", "true"],
+             ["load", "foo"],
              ["jtrue", 1],
-             ["load", "false"],
+             ["load", "bar"],
              ["bool_expr"]
            ] = InstructionsVisitor.accept(ast)
 
-    source = "true or !false"
+    source = "foo or !bar"
     {:ok, ast} = Parser.process(source)
 
     assert [
-             ["load", "true"],
+             ["load", "foo"],
              ["jtrue", 2],
-             ["load", "false"],
+             ["load", "bar"],
              ["not"],
              ["bool_expr"]
            ] = InstructionsVisitor.accept(ast)
   end
 
   test "call expression with no arguments" do
-    source = "true()"
+    source = "tru()"
     {:ok, ast} = Parser.process(source)
 
     assert [
-             ["call", "true", 0],
+             ["call", "tru", 0],
              ["bool_expr"]
            ] = InstructionsVisitor.accept(ast)
   end

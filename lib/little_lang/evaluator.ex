@@ -106,6 +106,13 @@ defmodule LittleLang.Evaluator do
     %__MODULE__{evaluator | stack: [:undefined | rest_of_stack]}
   end
 
+  # lit
+  #
+  # Push the literal provided onto the stack.
+  def process_instruction(%__MODULE__{processing: ["lit", literal], stack: stack} = evaluator) do
+    %__MODULE__{evaluator | stack: [literal | stack]}
+  end
+
   # load
   #
   # Load the identifier from the context and push it onto the stack

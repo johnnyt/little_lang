@@ -10,6 +10,12 @@ defmodule LittleLang.Visitors.StringVisitorTest do
     assert source == StringVisitor.accept(ast)
   end
 
+  test "identifier" do
+    source = "foo"
+    {:ok, ast} = Parser.process(source)
+    assert source == StringVisitor.accept(ast)
+  end
+
   test "unary_op boolean" do
     source = "!true"
     {:ok, ast} = Parser.process(source)

@@ -27,12 +27,19 @@ defmodule LittleLang.Visitors.InstructionsVisitor do
 
   defp visit(
          %__MODULE__{instructions: instructions} = visitor,
+         {:bool_lit, bool}
+       ) do
+    %__MODULE__{visitor | instructions: instructions ++ [["lit", bool]]}
+  end
+
+  defp visit(
+         %__MODULE__{instructions: instructions} = visitor,
          {:identifier, identifier}
        ) do
     %__MODULE__{visitor | instructions: instructions ++ [["load", identifier]]}
   end
 
-  defp visit(visitor, {:unary_expr, {unary_op, _string}, unary_expr})
+  defp visit(visitor, {:unary_expr, {unary_op, _image}, unary_expr})
        when unary_op in [:bang, :not] do
     visitor = visit(visitor, unary_expr)
     %__MODULE__{visitor | instructions: visitor.instructions ++ [["not"]]}

@@ -8,13 +8,13 @@ defmodule LittleLang.Evaluator.BoolExprTest do
   test "evaluates basic boolean expression" do
     assert true ==
              Evaluator.process([
-               ["load", "true"],
+               ["lit", true],
                ["bool_expr"]
              ])
 
     assert false ==
              Evaluator.process([
-               ["load", "false"],
+               ["lit", false],
                ["bool_expr"]
              ])
   end
