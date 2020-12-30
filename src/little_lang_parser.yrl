@@ -6,30 +6,6 @@
 % Literal      = BasicLit .
 % BasicLit     = int_lit .
 % NamedOperand = identifier .
-% 
-
-
-% First step - only identifiers
-%
-% BoolExpr     = Expression .
-% Expression   = UnaryExpr .
-% UnaryExpr    = BasicExpr .
-% BasicExpr    = Operand .
-% Operand      = NamedOperand .
-% NamedOperand = identifier .
-%
-% =>
-%
-% BoolExpr     = Expression .
-% Expression   = identifier .
-
-
-% Second step - unary_op
-%
-% BoolExpr     = Expression .
-% Expression   = UnaryExpr .
-% UnaryExpr    = BasicExpr | unary_op UnaryExpr .
-% BasicExpr    = identifier
 
 
 % Third step - BinaryExpr
@@ -39,28 +15,31 @@
 % UnaryExpr    = BasicExpr | unary_op UnaryExpr .
 % BasicExpr    = identifier
 
-Nonterminals BasicExpr BoolExpr Expression UnaryExpr logical_op unary_op.
-
-Terminals bang identifier not or.
-
+Nonterminals Arguments BasicExpr BoolExpr Expression ExpressionList LogicalOp UnaryExpr UnaryOp.
+Terminals bang identifier not or comma open_paren close_paren.
 Rootsymbol BoolExpr.
+
 Left 100 or.
 
-BoolExpr -> Expression : {bool_expr, '$1'}.
+BoolExpr   -> Expression : {bool_expr, '$1'}.
+Expression -> UnaryExpr : '$1'.
+Expression -> Expression LogicalOp Expression : {binary_expr, '$2', '$1', '$3'}.
+UnaryExpr  -> UnaryOp UnaryExpr : {unary_expr, '$1', '$2'}.
+UnaryExpr  -> BasicExpr : '$1'.
+BasicExpr  -> identifier : extract('$1').
+BasicExpr  -> BasicExpr Arguments : {call_expr, extract('$1'), '$2'}.
 
-Expression -> UnaryExpr : {expression, '$1'}.
-Expression -> Expression logical_op Expression : {expression, '$1', '$3', '$2'}.
+Arguments  -> open_paren close_paren : [].
+Arguments  -> open_paren ExpressionList close_paren : '$2'.
 
-UnaryExpr -> unary_op UnaryExpr : {unary_expr, '$2', '$1'}.
-UnaryExpr -> BasicExpr : '$1'.
+ExpressionList -> Expression : ['$1'].
+ExpressionList -> Expression comma ExpressionList : ['$1' | '$3'].
 
-BasicExpr -> identifier : extract('$1').
-
-unary_op -> not : extract('$1').
-unary_op -> bang : extract('$1').
-
-logical_op -> or : extract('$1').
+UnaryOp -> not : extract('$1').
+UnaryOp -> bang : extract('$1').
+LogicalOp -> or : extract('$1').
 
 Erlang code.
 
-extract({Type, _Line, Value}) -> {Type, Value}.
+extract({Type, _Line, Value}) -> {Type, Value};
+extract({Type, Value}) -> {Type, Value}.

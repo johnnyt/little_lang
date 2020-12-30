@@ -14,8 +14,7 @@ defmodule LittleLang.Visitors.InstructionsVisitor do
     %__MODULE__{visitor | instructions: visitor.instructions ++ [["bool_expr"]]}
   end
 
-  # BinaryExpr
-  defp visit(visitor, {:expression, left, right, {:or, _image}}) do
+  defp visit(visitor, {:binary_expr, {:or, _image}, left, right}) do
     left_visitor = visit(visitor, left)
 
     %__MODULE__{
@@ -26,19 +25,6 @@ defmodule LittleLang.Visitors.InstructionsVisitor do
     |> visit(right)
   end
 
-  # UnaryExpr
-  defp visit(visitor, {:expression, expr}) do
-    visit(visitor, expr)
-  end
-
-  defp visit(visitor, {:unary_expr, expr}) do
-    visit(visitor, expr)
-  end
-
-  defp visit(visitor, {:basic_expr, expr}) do
-    visit(visitor, expr)
-  end
-
   defp visit(
          %__MODULE__{instructions: instructions} = visitor,
          {:identifier, identifier}
@@ -46,10 +32,23 @@ defmodule LittleLang.Visitors.InstructionsVisitor do
     %__MODULE__{visitor | instructions: instructions ++ [["load", identifier]]}
   end
 
-  defp visit(visitor, {:unary_expr, unary_expr, {unary_op, _string}})
+  defp visit(visitor, {:unary_expr, {unary_op, _string}, unary_expr})
        when unary_op in [:bang, :not] do
     visitor = visit(visitor, unary_expr)
     %__MODULE__{visitor | instructions: visitor.instructions ++ [["not"]]}
+  end
+
+  defp visit(visitor, {:call_expr, {:identifier, function}, arguments}) do
+    visitor =
+      arguments
+      |> Enum.reduce(visitor, fn arg, acc ->
+        visit(acc, arg)
+      end)
+
+    %__MODULE__{
+      visitor
+      | instructions: visitor.instructions ++ [["call", function, length(arguments)]]
+    }
   end
 
   defp num_instructions(visitor, ast) do

@@ -7,33 +7,27 @@ defmodule LittleLang.Visitors.StringVisitor do
     visit(expression)
   end
 
-  # Unary Expr
-  defp visit({:expression, expr}) do
-    visit(expr)
-  end
-
-  # Binary Expr
-  defp visit({:expression, left, right, {_op_type, op_string}}) do
+  defp visit({:binary_expr, {_op_type, op_string}, left, right}) do
     "#{visit(left)} #{op_string} #{visit(right)}"
-  end
-
-  defp visit({:unary_expr, expr}) do
-    visit(expr)
-  end
-
-  defp visit({:basic_expr, expr}) do
-    visit(expr)
   end
 
   defp visit({:identifier, identifier}) do
     identifier
   end
 
-  defp visit({:unary_expr, unary_expr, {:bang, not_string}}) do
+  defp visit({:unary_expr, {:bang, not_string}, unary_expr}) do
     "#{not_string}#{visit(unary_expr)}"
   end
 
-  defp visit({:unary_expr, unary_expr, {:not, not_string}}) do
+  defp visit({:unary_expr, {:not, not_string}, unary_expr}) do
     "#{not_string} #{visit(unary_expr)}"
+  end
+
+  defp visit({:call_expr, function, arguments}) do
+    argument_strings =
+      arguments
+      |> Enum.map(fn arg -> visit(arg) end)
+
+    "#{visit(function)}(#{Enum.join(argument_strings, ", ")})"
   end
 end

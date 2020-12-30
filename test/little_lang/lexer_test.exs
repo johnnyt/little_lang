@@ -49,4 +49,12 @@ defmodule LittleLang.LexerTest do
   test "lexes binary operators" do
     assert [{:or, 1, "or"}] = Lexer.process!("or")
   end
+
+  test "lexes parens" do
+    assert [{:open_paren, 1, "("}, {:close_paren, 1, ")"}] = Lexer.process!("()")
+  end
+
+  test "lexes comma" do
+    assert [{:comma, 1, ","}] = Lexer.process!(",")
+  end
 end

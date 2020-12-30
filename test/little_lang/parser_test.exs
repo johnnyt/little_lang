@@ -6,20 +6,34 @@ defmodule LittleLang.ParserTest do
   doctest Parser
 
   test "parses basic boolean expression" do
-    assert {:ok, {:bool_expr, {:expression, {:identifier, "true"}}}} = Parser.process("true")
+    assert {:bool_expr, {:identifier, "true"}} = Parser.process!("true")
   end
 
   test "parses unary op and expression" do
-    assert {:bool_expr, {:expression, {:unary_expr, {:identifier, "true"}, {:bang, "!"}}}} =
+    assert {:bool_expr, {:unary_expr, {:bang, "!"}, {:identifier, "true"}}} =
              Parser.process!("!true")
 
-    assert {:bool_expr, {:expression, {:unary_expr, {:identifier, "true"}, {:not, "not"}}}} =
+    assert {:bool_expr, {:unary_expr, {:not, "not"}, {:identifier, "true"}}} =
              Parser.process!("not true")
   end
 
   test "parses binary expression" do
+    assert {:bool_expr, {:binary_expr, {:or, "or"}, {:identifier, "a"}, {:identifier, "b"}}} =
+             Parser.process!("a or b")
+
     assert {:bool_expr,
-            {:expression, {:expression, {:identifier, "a"}}, {:expression, {:identifier, "b"}},
-             {:or, "or"}}} = Parser.process!("a or b")
+            {:binary_expr, {:or, "or"}, {:identifier, "a"},
+             {:unary_expr, {:bang, "!"}, {:identifier, "b"}}}} = Parser.process!("a or !b")
+  end
+
+  test "parses call expression" do
+    assert {:bool_expr,
+            {:call_expr, {:identifier, "min"}, [{:identifier, "a"}, {:identifier, "b"}]}} =
+             Parser.process!("min(a, b)")
+
+    assert {:bool_expr,
+            {:call_expr, {:identifier, "min"},
+             [{:identifier, "a"}, {:unary_expr, {:bang, "!"}, {:identifier, "b"}}]}} =
+             Parser.process!("min(a, !b)")
   end
 end

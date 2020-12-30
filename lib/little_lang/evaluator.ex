@@ -7,6 +7,7 @@ defmodule LittleLang.Evaluator do
 
   @type bool_or_undefined :: boolean() | :undefined
 
+  @default_external_functions LittleLang.ExternalFunctions
   @undefined :undefined
 
   defstruct [
@@ -49,6 +50,23 @@ defmodule LittleLang.Evaluator do
     instructions
     |> new(context)
     |> process_next_instruction()
+  end
+
+  # call
+  #
+  # Call the external function named in the instruction and use the top
+  # Otherwise remove the top of the stack
+  def process_instruction(
+        %__MODULE__{
+          processing: ["call", function, arity],
+          stack: stack
+        } = evaluator
+      ) do
+    {arguments, sub_stack} = Enum.split(stack, arity)
+
+    call_result = apply(external_functions(), String.to_existing_atom(function), arguments)
+
+    %__MODULE__{evaluator | stack: [call_result | sub_stack]}
   end
 
   # jtrue
@@ -152,7 +170,7 @@ defmodule LittleLang.Evaluator do
   def peek(%__MODULE__{stack: []}), do: nil
   def peek(%__MODULE__{stack: [head | _tail]}), do: head
 
-  defp load_from_context(context, identifier) do
-    Map.get(context, identifier)
-  end
+  defp load_from_context(context, identifier), do: Map.get(context, identifier)
+
+  defp external_functions(), do: @default_external_functions
 end

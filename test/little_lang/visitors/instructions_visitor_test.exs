@@ -56,4 +56,27 @@ defmodule LittleLang.Visitors.InstructionsVisitorTest do
              ["bool_expr"]
            ] = InstructionsVisitor.accept(ast)
   end
+
+  test "call expression with no arguments" do
+    source = "true()"
+    {:ok, ast} = Parser.process(source)
+
+    assert [
+             ["call", "true", 0],
+             ["bool_expr"]
+           ] = InstructionsVisitor.accept(ast)
+  end
+
+  test "call expression" do
+    source = "min(a, !b)"
+    {:ok, ast} = Parser.process(source)
+
+    assert [
+             ["load", "a"],
+             ["load", "b"],
+             ["not"],
+             ["call", "min", 2],
+             ["bool_expr"]
+           ] = InstructionsVisitor.accept(ast)
+  end
 end
