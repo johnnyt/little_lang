@@ -65,6 +65,29 @@ defmodule LittleLang.Visitors.InstructionsVisitorTest do
            ] = InstructionsVisitor.accept(ast)
   end
 
+  test "identifier = identifier" do
+    source = "foo = bar"
+    {:ok, ast} = Parser.process(source)
+
+    assert [
+             ["load", "foo"],
+             ["load", "bar"],
+             ["compare", "EQ"],
+             ["bool_expr"]
+           ] = InstructionsVisitor.accept(ast)
+
+    source = "foo or !bar"
+    {:ok, ast} = Parser.process(source)
+
+    assert [
+             ["load", "foo"],
+             ["jtrue", 2],
+             ["load", "bar"],
+             ["not"],
+             ["bool_expr"]
+           ] = InstructionsVisitor.accept(ast)
+  end
+
   test "identifier or identifier" do
     source = "foo or bar"
     {:ok, ast} = Parser.process(source)

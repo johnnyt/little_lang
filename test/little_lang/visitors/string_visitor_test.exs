@@ -54,6 +54,12 @@ defmodule LittleLang.Visitors.StringVisitorTest do
     assert source == StringVisitor.accept(ast)
   end
 
+  test "identifier equals identifier" do
+    source = "a = b"
+    {:ok, ast} = Parser.process(source)
+    assert source == StringVisitor.accept(ast)
+  end
+
   test "call_expr" do
     source = "min(a, b)"
     {:ok, ast} = Parser.process(source)
