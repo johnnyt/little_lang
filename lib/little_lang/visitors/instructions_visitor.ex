@@ -57,6 +57,10 @@ defmodule LittleLang.Visitors.InstructionsVisitor do
     %__MODULE__{visitor | instructions: visitor.instructions ++ [["minus"]]}
   end
 
+  defp visit(visitor, {:group_expr, expression}) do
+    visit(visitor, expression)
+  end
+
   defp visit(visitor, {:call_expr, {:identifier, function}, arguments}) do
     visitor =
       arguments

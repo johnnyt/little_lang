@@ -11,8 +11,9 @@ Left 100 or.
 
 BoolExpr   -> Expression          : {bool_expr, '$1'}.
 
-Expression -> UnaryExpr           : '$1'.
-Expression -> Expression LogicalOp Expression : {binary_expr, '$2', '$1', '$3'}.
+Expression -> UnaryExpr                         : '$1'.
+Expression -> Expression LogicalOp Expression   : {binary_expr, '$2', '$1', '$3'}.
+BasicExpr  -> open_paren Expression close_paren : {group_expr, '$2'}.
 
 UnaryExpr  -> UnaryOp UnaryExpr   : {unary_expr, '$1', '$2'}.
 UnaryExpr  -> BasicExpr           : '$1'.

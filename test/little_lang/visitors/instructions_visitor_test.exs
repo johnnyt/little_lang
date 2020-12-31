@@ -110,4 +110,30 @@ defmodule LittleLang.Visitors.InstructionsVisitorTest do
              ["bool_expr"]
            ] = InstructionsVisitor.accept(ast)
   end
+
+  test "group expression" do
+    source = "a or (b or c)"
+    {:ok, ast} = Parser.process(source)
+
+    assert [
+             ["load", "a"],
+             ["jtrue", 3],
+             ["load", "b"],
+             ["jtrue", 1],
+             ["load", "c"],
+             ["bool_expr"]
+           ] = InstructionsVisitor.accept(ast)
+
+    source = "(a or b) or c"
+    {:ok, ast} = Parser.process(source)
+
+    assert [
+             ["load", "a"],
+             ["jtrue", 1],
+             ["load", "b"],
+             ["jtrue", 1],
+             ["load", "c"],
+             ["bool_expr"]
+           ] = InstructionsVisitor.accept(ast)
+  end
 end

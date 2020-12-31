@@ -28,6 +28,23 @@ defmodule LittleLang.ParserTest do
              {:unary_expr, {:bang, "!"}, {:identifier, "b"}}}} = Parser.process!("a or !b")
   end
 
+  test "parses grouping binary expressions" do
+    assert {:bool_expr,
+            {:binary_expr, {:or, "or"}, {:identifier, "a"},
+             {:binary_expr, {:or, "or"}, {:identifier, "b"}, {:identifier, "c"}}}} =
+             Parser.process!("a or b or c")
+
+    assert {:bool_expr,
+            {:binary_expr, {:or, "or"}, {:identifier, "a"},
+             {:group_expr, {:binary_expr, {:or, "or"}, {:identifier, "b"}, {:identifier, "c"}}}}} =
+             Parser.process!("a or (b or c)")
+
+    assert {:bool_expr,
+            {:binary_expr, {:or, "or"},
+             {:group_expr, {:binary_expr, {:or, "or"}, {:identifier, "a"}, {:identifier, "b"}}},
+             {:identifier, "c"}}} = Parser.process!("(a or b) or c")
+  end
+
   test "parses call expression" do
     assert {:bool_expr,
             {:call_expr, {:identifier, "min"}, [{:identifier, "a"}, {:identifier, "b"}]}} =

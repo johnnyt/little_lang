@@ -11,6 +11,10 @@ defmodule LittleLang.Visitors.StringVisitor do
     "#{visit(left)} #{op_image} #{visit(right)}"
   end
 
+  defp visit({:group_expr, expression}) do
+    "(#{visit(expression)})"
+  end
+
   defp visit({:bool_lit, bool}) do
     "#{bool}"
   end
