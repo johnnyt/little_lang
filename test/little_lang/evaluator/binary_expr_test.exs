@@ -5,7 +5,7 @@ defmodule LittleLang.Evaluator.BinaryExprTest do
 
   doctest Evaluator
 
-  test "evaluates basic binary expression" do
+  test "evaluates or expression" do
     assert true ==
              Evaluator.process([
                ["load", "true"],
