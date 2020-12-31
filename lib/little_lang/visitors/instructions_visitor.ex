@@ -25,6 +25,18 @@ defmodule LittleLang.Visitors.InstructionsVisitor do
     |> visit(right)
   end
 
+  defp visit(visitor, {:binary_expr, {:equals, _image}, left, right}) do
+    visited =
+      visitor
+      |> visit(left)
+      |> visit(right)
+
+    %__MODULE__{
+      visited
+      | instructions: visited.instructions ++ [["compare", "EQ"]]
+    }
+  end
+
   defp visit(
          %__MODULE__{instructions: instructions} = visitor,
          {:bool_lit, bool}

@@ -20,39 +20,70 @@ defmodule LittleLang.ParserTest do
   end
 
   test "parses binary expression" do
-    assert {:bool_expr, {:binary_expr, {:or, "or"}, {:identifier, "a"}, {:identifier, "b"}}} =
-             Parser.process!("a or b")
+    assert {:bool_expr,
+            {
+              :binary_expr,
+              {:or, "or"},
+              {:identifier, "a"},
+              {:identifier, "b"}
+            }} = Parser.process!("a or b")
 
     assert {:bool_expr,
-            {:binary_expr, {:or, "or"}, {:identifier, "a"},
-             {:unary_expr, {:bang, "!"}, {:identifier, "b"}}}} = Parser.process!("a or !b")
+            {
+              :binary_expr,
+              {:equals, "="},
+              {:identifier, "a"},
+              {:identifier, "b"}
+            }} = Parser.process!("a = b")
+
+    assert {:bool_expr,
+            {
+              :binary_expr,
+              {:or, "or"},
+              {:identifier, "a"},
+              {:unary_expr, {:bang, "!"}, {:identifier, "b"}}
+            }} = Parser.process!("a or !b")
   end
 
   test "parses grouping binary expressions" do
     assert {:bool_expr,
-            {:binary_expr, {:or, "or"}, {:identifier, "a"},
-             {:binary_expr, {:or, "or"}, {:identifier, "b"}, {:identifier, "c"}}}} =
-             Parser.process!("a or b or c")
+            {
+              :binary_expr,
+              {:or, "or"},
+              {:binary_expr, {:or, "or"}, {:identifier, "a"}, {:identifier, "b"}},
+              {:identifier, "c"}
+            }} = Parser.process!("a or b or c")
 
     assert {:bool_expr,
-            {:binary_expr, {:or, "or"}, {:identifier, "a"},
-             {:group_expr, {:binary_expr, {:or, "or"}, {:identifier, "b"}, {:identifier, "c"}}}}} =
-             Parser.process!("a or (b or c)")
+            {
+              :binary_expr,
+              {:or, "or"},
+              {:identifier, "a"},
+              {:group_expr, {:binary_expr, {:or, "or"}, {:identifier, "b"}, {:identifier, "c"}}}
+            }} = Parser.process!("a or (b or c)")
 
     assert {:bool_expr,
-            {:binary_expr, {:or, "or"},
-             {:group_expr, {:binary_expr, {:or, "or"}, {:identifier, "a"}, {:identifier, "b"}}},
-             {:identifier, "c"}}} = Parser.process!("(a or b) or c")
+            {
+              :binary_expr,
+              {:or, "or"},
+              {:group_expr, {:binary_expr, {:or, "or"}, {:identifier, "a"}, {:identifier, "b"}}},
+              {:identifier, "c"}
+            }} = Parser.process!("(a or b) or c")
   end
 
   test "parses call expression" do
     assert {:bool_expr,
-            {:call_expr, {:identifier, "min"}, [{:identifier, "a"}, {:identifier, "b"}]}} =
-             Parser.process!("min(a, b)")
+            {
+              :call_expr,
+              {:identifier, "min"},
+              [{:identifier, "a"}, {:identifier, "b"}]
+            }} = Parser.process!("min(a, b)")
 
     assert {:bool_expr,
-            {:call_expr, {:identifier, "min"},
-             [{:identifier, "a"}, {:unary_expr, {:bang, "!"}, {:identifier, "b"}}]}} =
-             Parser.process!("min(a, !b)")
+            {
+              :call_expr,
+              {:identifier, "min"},
+              [{:identifier, "a"}, {:unary_expr, {:bang, "!"}, {:identifier, "b"}}]
+            }} = Parser.process!("min(a, !b)")
   end
 end

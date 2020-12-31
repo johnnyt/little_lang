@@ -19,6 +19,12 @@ defmodule LittleLang.Evaluator do
     stack: []
   ]
 
+  defguard is_undefined?(value) when value == @undefined
+
+  defguard types_match?(a, b)
+           when (is_integer(a) and is_integer(b)) or
+                  (is_boolean(a) and is_boolean(b))
+
   @spec build_context(map :: Map.t()) :: Map.t()
   @doc """
   Returns the default context with globals merged onto the provided map.
@@ -50,6 +56,36 @@ defmodule LittleLang.Evaluator do
     instructions
     |> new(context)
     |> process_next_instruction()
+  end
+
+  # compare EQ
+  #
+  # Pops the top two values from the stack to compare.
+  # If either one is undefined, or if the types don't match then pushes undefined on the stack.
+  # Otherwise compare equality and push the boolean on the stack.
+  def process_instruction(
+        %__MODULE__{processing: ["compare", "EQ"], stack: [right | [left | sub_stack]]} =
+          evaluator
+      )
+      when is_undefined?(right) or is_undefined?(left) do
+    %__MODULE__{evaluator | stack: [@undefined | sub_stack]}
+  end
+
+  def process_instruction(
+        %__MODULE__{processing: ["compare", "EQ"], stack: [right | [left | sub_stack]]} =
+          evaluator
+      )
+      when types_match?(left, right) do
+    compare_result = left == right
+
+    %__MODULE__{evaluator | stack: [compare_result | sub_stack]}
+  end
+
+  def process_instruction(
+        %__MODULE__{processing: ["compare", "EQ"], stack: [_right | [_left | sub_stack]]} =
+          evaluator
+      ) do
+    %__MODULE__{evaluator | stack: [@undefined | sub_stack]}
   end
 
   # call
@@ -103,7 +139,7 @@ defmodule LittleLang.Evaluator do
   def process_instruction(
         %__MODULE__{processing: ["minus"], stack: [_invalid_top | rest_of_stack]} = evaluator
       ) do
-    %__MODULE__{evaluator | stack: [:undefined | rest_of_stack]}
+    %__MODULE__{evaluator | stack: [@undefined | rest_of_stack]}
   end
 
   # not
@@ -120,7 +156,7 @@ defmodule LittleLang.Evaluator do
   def process_instruction(
         %__MODULE__{processing: ["not"], stack: [_invalid_top | rest_of_stack]} = evaluator
       ) do
-    %__MODULE__{evaluator | stack: [:undefined | rest_of_stack]}
+    %__MODULE__{evaluator | stack: [@undefined | rest_of_stack]}
   end
 
   # lit
@@ -132,11 +168,18 @@ defmodule LittleLang.Evaluator do
 
   # load
   #
-  # Load the identifier from the context and push it onto the stack
+  # Load the identifier from the context and push it onto the stack.
+  # If the key doesn't exist, or the value returned is nil, push undefined onto the stack.
   def process_instruction(
         %__MODULE__{processing: ["load", identifier], context: context, stack: stack} = evaluator
       ) do
-    value = load_from_context(context, identifier)
+    value =
+      load_from_context(context, identifier)
+      |> case do
+        nil -> @undefined
+        val -> val
+      end
+
     %__MODULE__{evaluator | stack: [value | stack]}
   end
 
