@@ -46,6 +46,7 @@ LogicalOp  -> or      : extract('$1').
 RelOp      -> equals  : extract('$1').
 
 DualOp     -> plus    : extract('$1').
+DualOp     -> minus   : extract('$1').
 
 Erlang code.
 

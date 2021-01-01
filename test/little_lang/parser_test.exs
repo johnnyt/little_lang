@@ -47,6 +47,14 @@ defmodule LittleLang.ParserTest do
     assert {:bool_expr,
             {
               :binary_expr,
+              {:minus, "-"},
+              {:identifier, "a"},
+              {:identifier, "b"}
+            }} = Parser.process!("a - b")
+
+    assert {:bool_expr,
+            {
+              :binary_expr,
               {:or, "or"},
               {:identifier, "a"},
               {:unary_expr, {:bang, "!"}, {:identifier, "b"}}
