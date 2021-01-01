@@ -15,6 +15,7 @@ not           : {token, {'not', TokenLine, list_to_binary(TokenChars)}}.
 or            : {token, {'or', TokenLine, list_to_binary(TokenChars)}}.
 -             : {token, {minus, TokenLine, list_to_binary(TokenChars)}}.
 ,             : {token, {comma, TokenLine, list_to_binary(TokenChars)}}.
+\+            : {token, {plus, TokenLine, list_to_binary(TokenChars)}}.
 =             : {token, {equals, TokenLine, list_to_binary(TokenChars)}}.
 \(            : {token, {open_paren, TokenLine, list_to_binary(TokenChars)}}.
 \)            : {token, {close_paren, TokenLine, list_to_binary(TokenChars)}}.

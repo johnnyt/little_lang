@@ -68,6 +68,8 @@ defmodule LittleLang.LexerTest do
   test "lexes binary operators" do
     assert [{:or, 1, "or"}] = Lexer.process!("or")
 
+    assert [{:plus, 1, "+"}] = Lexer.process!("+")
+
     assert [{:equals, 1, "="}] = Lexer.process!("=")
   end
 
