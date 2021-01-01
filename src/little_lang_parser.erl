@@ -1,6 +1,6 @@
 -module(little_lang_parser).
 -export([parse/1, parse_and_scan/1, format_error/1]).
--file("src/little_lang_parser.yrl", 51).
+-file("src/little_lang_parser.yrl", 50).
 
 extract({Type, _Line, Value}) -> {Type, Value}.
 
@@ -545,7 +545,7 @@ yeccpars2_32(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_0(1, Cat, Ss, Stack, T, Ts, Tzr).
 
 -compile({inline,yeccpars2_4_/1}).
--file("src/little_lang_parser.yrl", 12).
+-file("src/little_lang_parser.yrl", 11).
 yeccpars2_4_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -553,7 +553,7 @@ yeccpars2_4_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_7_/1}).
--file("src/little_lang_parser.yrl", 33).
+-file("src/little_lang_parser.yrl", 32).
 yeccpars2_7_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -561,7 +561,7 @@ yeccpars2_7_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_8_/1}).
--file("src/little_lang_parser.yrl", 24).
+-file("src/little_lang_parser.yrl", 23).
 yeccpars2_8_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -569,7 +569,7 @@ yeccpars2_8_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_9_/1}).
--file("src/little_lang_parser.yrl", 26).
+-file("src/little_lang_parser.yrl", 25).
 yeccpars2_9_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -577,7 +577,7 @@ yeccpars2_9_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_10_/1}).
--file("src/little_lang_parser.yrl", 25).
+-file("src/little_lang_parser.yrl", 24).
 yeccpars2_10_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -585,7 +585,7 @@ yeccpars2_10_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_11_/1}).
--file("src/little_lang_parser.yrl", 34).
+-file("src/little_lang_parser.yrl", 33).
 yeccpars2_11_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -593,7 +593,7 @@ yeccpars2_11_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_12_/1}).
--file("src/little_lang_parser.yrl", 35).
+-file("src/little_lang_parser.yrl", 34).
 yeccpars2_12_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -601,7 +601,7 @@ yeccpars2_12_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_19_/1}).
--file("src/little_lang_parser.yrl", 16).
+-file("src/little_lang_parser.yrl", 15).
 yeccpars2_19_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -609,7 +609,7 @@ yeccpars2_19_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_20_/1}).
--file("src/little_lang_parser.yrl", 43).
+-file("src/little_lang_parser.yrl", 42).
 yeccpars2_20_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -617,7 +617,7 @@ yeccpars2_20_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_21_/1}).
--file("src/little_lang_parser.yrl", 41).
+-file("src/little_lang_parser.yrl", 40).
 yeccpars2_21_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -625,7 +625,7 @@ yeccpars2_21_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_22_/1}).
--file("src/little_lang_parser.yrl", 45).
+-file("src/little_lang_parser.yrl", 44).
 yeccpars2_22_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -633,7 +633,7 @@ yeccpars2_22_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_23_/1}).
--file("src/little_lang_parser.yrl", 15).
+-file("src/little_lang_parser.yrl", 14).
 yeccpars2_23_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -641,7 +641,7 @@ yeccpars2_23_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_24_/1}).
--file("src/little_lang_parser.yrl", 22).
+-file("src/little_lang_parser.yrl", 21).
 yeccpars2_24_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin
@@ -649,7 +649,7 @@ yeccpars2_24_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_27_/1}).
--file("src/little_lang_parser.yrl", 30).
+-file("src/little_lang_parser.yrl", 29).
 yeccpars2_27_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -657,7 +657,7 @@ yeccpars2_27_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_28_/1}).
--file("src/little_lang_parser.yrl", 28).
+-file("src/little_lang_parser.yrl", 27).
 yeccpars2_28_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin
@@ -665,7 +665,7 @@ yeccpars2_28_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_30_/1}).
--file("src/little_lang_parser.yrl", 31).
+-file("src/little_lang_parser.yrl", 30).
 yeccpars2_30_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -673,7 +673,7 @@ yeccpars2_30_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_31_/1}).
--file("src/little_lang_parser.yrl", 29).
+-file("src/little_lang_parser.yrl", 28).
 yeccpars2_31_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -681,7 +681,7 @@ yeccpars2_31_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_32_/1}).
--file("src/little_lang_parser.yrl", 18).
+-file("src/little_lang_parser.yrl", 17).
 yeccpars2_32_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin
@@ -689,4 +689,4 @@ yeccpars2_32_(__Stack0) ->
   end | __Stack].
 
 
--file("src/little_lang_parser.yrl", 54).
+-file("src/little_lang_parser.yrl", 53).
