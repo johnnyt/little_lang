@@ -3,7 +3,7 @@ Nonterminals
   Operand RelOp UnaryExpr UnaryOp.
 
 Terminals
-  bang bool_lit comma equals identifier int_lit minus not or plus
+  bang bool_lit comma equals identifier int_lit minus not or plus string_lit
   open_paren close_paren.
 
 Rootsymbol BoolExpr.
@@ -26,6 +26,7 @@ BasicExpr  -> BasicExpr Arguments : {call_expr, '$1', '$2'}.
 
 Operand    -> bool_lit            : extract('$1').
 Operand    -> int_lit             : extract('$1').
+Operand    -> string_lit          : extract('$1').
 Operand    -> identifier          : extract('$1').
 
 Arguments      -> open_paren close_paren : [].

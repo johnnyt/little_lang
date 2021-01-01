@@ -24,6 +24,11 @@ defmodule LittleLang.LexerTest do
     assert [{:int_lit, 1, 314_159_265_358_979_323}] = Lexer.process!("314159265358979323")
   end
 
+  test "lexes strings" do
+    assert [{:string_lit, 1, "basic with double"}] = Lexer.process!(~s["basic with double"])
+    assert [{:string_lit, 1, "basic with single"}] = Lexer.process!(~s['basic with single'])
+  end
+
   test "lexes identifiers containing keyworkds" do
     assert [{:identifier, 1, "atrue"}] = Lexer.process!("atrue")
     assert [{:identifier, 1, "trueA"}] = Lexer.process!("trueA")

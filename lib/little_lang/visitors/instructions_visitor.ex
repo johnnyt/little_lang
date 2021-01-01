@@ -63,9 +63,10 @@ defmodule LittleLang.Visitors.InstructionsVisitor do
 
   defp visit(
          %__MODULE__{instructions: instructions} = visitor,
-         {:bool_lit, bool}
-       ) do
-    %__MODULE__{visitor | instructions: instructions ++ [["lit", bool]]}
+         {lit_type, lit_value}
+       )
+       when lit_type in [:bool_lit, :int_lit, :string_lit] do
+    %__MODULE__{visitor | instructions: instructions ++ [["lit", lit_value]]}
   end
 
   defp visit(
@@ -73,13 +74,6 @@ defmodule LittleLang.Visitors.InstructionsVisitor do
          {:identifier, identifier}
        ) do
     %__MODULE__{visitor | instructions: instructions ++ [["load", identifier]]}
-  end
-
-  defp visit(
-         %__MODULE__{instructions: instructions} = visitor,
-         {:int_lit, int}
-       ) do
-    %__MODULE__{visitor | instructions: instructions ++ [["lit", int]]}
   end
 
   defp visit(visitor, {:unary_expr, {unary_op, _image}, unary_expr})

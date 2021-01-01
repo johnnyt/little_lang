@@ -24,6 +24,16 @@ defmodule LittleLang.Visitors.InstructionsVisitorTest do
            ] = InstructionsVisitor.accept(ast)
   end
 
+  test "string literal" do
+    source = ~s["this is a string"]
+    {:ok, ast} = Parser.process(source)
+
+    assert [
+             ["lit", "this is a string"],
+             ["bool_expr"]
+           ] = InstructionsVisitor.accept(ast)
+  end
+
   test "identifier" do
     source = "foo"
     {:ok, ast} = Parser.process(source)
