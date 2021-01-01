@@ -58,6 +58,31 @@ defmodule LittleLang.Evaluator do
     |> process_next_instruction()
   end
 
+  # add
+  #
+  # Pops the top two values from the stack to add.
+  # If either one is undefined, or if the types don't match then pushes undefined on the stack.
+  # Otherwise add the two values and push the boolean on the stack.
+  def process_instruction(
+        %__MODULE__{processing: ["add"], stack: [right | [left | sub_stack]]} = evaluator
+      )
+      when is_undefined?(right) or is_undefined?(left) do
+    %__MODULE__{evaluator | stack: [@undefined | sub_stack]}
+  end
+
+  def process_instruction(
+        %__MODULE__{processing: ["add"], stack: [right | [left | sub_stack]]} = evaluator
+      )
+      when types_match?(left, right) do
+    %__MODULE__{evaluator | stack: [left + right | sub_stack]}
+  end
+
+  def process_instruction(
+        %__MODULE__{processing: ["add"], stack: [_right | [_left | sub_stack]]} = evaluator
+      ) do
+    %__MODULE__{evaluator | stack: [@undefined | sub_stack]}
+  end
+
   # compare EQ
   #
   # Pops the top two values from the stack to compare.

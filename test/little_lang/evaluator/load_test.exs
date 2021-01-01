@@ -1,4 +1,4 @@
-defmodule LittleLang.Evaluator.BinaryExprTest do
+defmodule LittleLang.Evaluator.LoadTest do
   use ExUnit.Case, async: true
 
   alias LittleLang.Evaluator
