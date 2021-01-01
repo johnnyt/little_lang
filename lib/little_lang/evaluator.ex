@@ -83,6 +83,31 @@ defmodule LittleLang.Evaluator do
     %__MODULE__{evaluator | stack: [@undefined | sub_stack]}
   end
 
+  # subtract
+  #
+  # Pops the top two values from the stack to subtract.
+  # If either one is undefined, or if the types don't match then pushes undefined on the stack.
+  # Otherwise subtract right from left and push the boolean on the stack.
+  def process_instruction(
+        %__MODULE__{processing: ["subtract"], stack: [right | [left | sub_stack]]} = evaluator
+      )
+      when is_undefined?(right) or is_undefined?(left) do
+    %__MODULE__{evaluator | stack: [@undefined | sub_stack]}
+  end
+
+  def process_instruction(
+        %__MODULE__{processing: ["subtract"], stack: [right | [left | sub_stack]]} = evaluator
+      )
+      when types_match?(left, right) do
+    %__MODULE__{evaluator | stack: [left - right | sub_stack]}
+  end
+
+  def process_instruction(
+        %__MODULE__{processing: ["subtract"], stack: [_right | [_left | sub_stack]]} = evaluator
+      ) do
+    %__MODULE__{evaluator | stack: [@undefined | sub_stack]}
+  end
+
   # compare EQ
   #
   # Pops the top two values from the stack to compare.
