@@ -63,12 +63,19 @@ defmodule LittleLang.Evaluator do
   #
   # Pops the top two values from the stack to add.
   # If either one is undefined, or if the types don't match then pushes undefined on the stack.
-  # Otherwise add the two values and push the boolean on the stack.
+  # Otherwise add the two values and push the result on the stack.
   def process_instruction(
         %__MODULE__{processing: ["add"], stack: [right | [left | sub_stack]]} = evaluator
       )
       when is_undefined?(right) or is_undefined?(left) do
     %__MODULE__{evaluator | stack: [@undefined | sub_stack]}
+  end
+
+  def process_instruction(
+        %__MODULE__{processing: ["add"], stack: [right | [left | sub_stack]]} = evaluator
+      )
+      when types_match?(left, right) and is_binary(left) do
+    %__MODULE__{evaluator | stack: [left <> right | sub_stack]}
   end
 
   def process_instruction(
