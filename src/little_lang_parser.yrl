@@ -1,10 +1,10 @@
 Nonterminals
-  Arguments BasicExpr BinaryOp BoolExpr DualOp Expression ExpressionList LogicalOp
-  Operand RelOp UnaryExpr UnaryOp.
+  Arguments BasicExpr BinaryOp BoolExpr DualOp Expression ExpressionList
+  ListLit LogicalOp Operand RelOp UnaryExpr UnaryOp.
 
 Terminals
   bang bool_lit comma equals identifier int_lit minus not or plus string_lit
-  open_paren close_paren.
+  open_bracket close_bracket open_paren close_paren.
 
 Rootsymbol BoolExpr.
 
@@ -28,9 +28,14 @@ Operand    -> bool_lit            : extract('$1').
 Operand    -> int_lit             : extract('$1').
 Operand    -> string_lit          : extract('$1').
 Operand    -> identifier          : extract('$1').
+Operand    -> ListLit             : {list_lit, '$1'}.
+
+ListLit    -> open_bracket close_bracket : [].
+ListLit    -> open_bracket ExpressionList close_bracket : '$2'.
 
 Arguments      -> open_paren close_paren : [].
 Arguments      -> open_paren ExpressionList close_paren : '$2'.
+
 ExpressionList -> Expression : ['$1'].
 ExpressionList -> Expression comma ExpressionList : ['$1' | '$3'].
 
