@@ -23,6 +23,10 @@ defmodule LittleLang.Visitors.StringVisitor do
     "#{int}"
   end
 
+  defp visit({:string_lit, string}) do
+    ~s["#{string}"]
+  end
+
   defp visit({:identifier, identifier_image}) do
     identifier_image
   end

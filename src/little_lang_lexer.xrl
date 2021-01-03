@@ -5,11 +5,13 @@ COMMENT     = #.*
 IDENTIFIER  = [_a-zA-Z][_a-zA-Z0-9]*
 BOOL        = (true|false)
 INT         = [0-9]+
+STRING      = ("(\?:\\.|[^\\""])*"|'((\?:\\.|[^\\''])*)')
 
 Rules.
 
 {BOOL}        : {token, {bool_lit, TokenLine, list_to_atom(TokenChars)}}.
 {INT}         : {token, {int_lit, TokenLine, list_to_integer(TokenChars)}}.
+{STRING}      : {token, {string_lit, TokenLine, extract_string(TokenChars, TokenLen)}}.
 !             : {token, {bang, TokenLine, list_to_binary(TokenChars)}}.
 not           : {token, {'not', TokenLine, list_to_binary(TokenChars)}}.
 or            : {token, {'or', TokenLine, list_to_binary(TokenChars)}}.
@@ -24,3 +26,6 @@ or            : {token, {'or', TokenLine, list_to_binary(TokenChars)}}.
 {WHITESPACE}+ : skip_token.
 
 Erlang code.
+
+extract_string(TokenChars, TokenLen) ->
+  list_to_binary(string:slice(TokenChars, 1, TokenLen-2)).

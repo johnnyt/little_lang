@@ -5,7 +5,7 @@ defmodule LittleLang.Evaluator.RelExprTest do
 
   doctest Evaluator
 
-  test "evaluates = expression" do
+  test "evaluates = expression with ints" do
     assert true ==
              Evaluator.process(
                [["load", "a"], ["load", "b"], ["compare", "EQ"]],
@@ -16,6 +16,20 @@ defmodule LittleLang.Evaluator.RelExprTest do
              Evaluator.process(
                [["load", "a"], ["load", "b"], ["compare", "EQ"]],
                %{"a" => 1, "b" => 42}
+             )
+  end
+
+  test "evaluates = expression with strings" do
+    assert true ==
+             Evaluator.process(
+               [["load", "a"], ["load", "b"], ["compare", "EQ"]],
+               %{"a" => "foo", "b" => "foo"}
+             )
+
+    assert false ==
+             Evaluator.process(
+               [["load", "a"], ["load", "b"], ["compare", "EQ"]],
+               %{"a" => "foo", "b" => "bar"}
              )
   end
 
