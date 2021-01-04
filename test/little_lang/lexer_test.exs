@@ -82,6 +82,10 @@ defmodule LittleLang.LexerTest do
     assert [{:open_paren, 1, "("}, {:close_paren, 1, ")"}] = Lexer.process!("()")
   end
 
+  test "lexes brackets" do
+    assert [{:open_bracket, 1, "["}, {:close_bracket, 1, "]"}] = Lexer.process!("[]")
+  end
+
   test "lexes comma" do
     assert [{:comma, 1, ","}] = Lexer.process!(",")
   end

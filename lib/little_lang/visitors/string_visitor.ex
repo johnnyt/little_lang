@@ -50,4 +50,12 @@ defmodule LittleLang.Visitors.StringVisitor do
 
     "#{visit(function)}(#{Enum.join(argument_strings, ", ")})"
   end
+
+  defp visit({:list_expr, expressions}) do
+    expression_strings =
+      expressions
+      |> Enum.map(fn arg -> visit(arg) end)
+
+    "[#{Enum.join(expression_strings, ", ")}]"
+  end
 end

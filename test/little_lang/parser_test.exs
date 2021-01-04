@@ -94,4 +94,12 @@ defmodule LittleLang.ParserTest do
               [{:identifier, "a"}, {:unary_expr, {:bang, "!"}, {:identifier, "b"}}]
             }} = Parser.process!("min(a, !b)")
   end
+
+  test "parses list expression" do
+    assert {:bool_expr,
+            {
+              :list_expr,
+              [{:identifier, "a"}, {:identifier, "b"}]
+            }} = Parser.process!("[a, b]")
+  end
 end

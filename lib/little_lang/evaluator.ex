@@ -63,12 +63,19 @@ defmodule LittleLang.Evaluator do
   #
   # Pops the top two values from the stack to add.
   # If either one is undefined, or if the types don't match then pushes undefined on the stack.
-  # Otherwise add the two values and push the boolean on the stack.
+  # Otherwise add the two values and push the result on the stack.
   def process_instruction(
         %__MODULE__{processing: ["add"], stack: [right | [left | sub_stack]]} = evaluator
       )
       when is_undefined?(right) or is_undefined?(left) do
     %__MODULE__{evaluator | stack: [@undefined | sub_stack]}
+  end
+
+  def process_instruction(
+        %__MODULE__{processing: ["add"], stack: [right | [left | sub_stack]]} = evaluator
+      )
+      when types_match?(left, right) and is_binary(left) do
+    %__MODULE__{evaluator | stack: [left <> right | sub_stack]}
   end
 
   def process_instruction(
@@ -82,6 +89,24 @@ defmodule LittleLang.Evaluator do
         %__MODULE__{processing: ["add"], stack: [_right | [_left | sub_stack]]} = evaluator
       ) do
     %__MODULE__{evaluator | stack: [@undefined | sub_stack]}
+  end
+
+  # append
+  #
+  # Pops the top value of the stack as the value to append, pops the next value as the list to append to.
+  # If the list is undefined or not a list, undefined is pushed back onto the stack.
+  # Otherwise the new list with the value appended to the end is pushed onto the stack.
+  def process_instruction(
+        %__MODULE__{processing: ["append"], stack: [_value | [list | sub_stack]]} = evaluator
+      )
+      when is_undefined?(list) or not is_list(list) do
+    %__MODULE__{evaluator | stack: [@undefined | sub_stack]}
+  end
+
+  def process_instruction(
+        %__MODULE__{processing: ["append"], stack: [value | [list | sub_stack]]} = evaluator
+      ) do
+    %__MODULE__{evaluator | stack: [list ++ [value] | sub_stack]}
   end
 
   # subtract

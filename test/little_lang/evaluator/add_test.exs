@@ -5,11 +5,20 @@ defmodule LittleLang.Evaluator.AddTest do
 
   doctest Evaluator
 
-  test "evaluates add instruction" do
+  test "evaluates add instruction with ints" do
     assert 7 ==
              Evaluator.process([
                ["lit", 3],
                ["lit", 4],
+               ["add"]
+             ])
+  end
+
+  test "evaluates add instruction with strings" do
+    assert "foo@bar.com" ==
+             Evaluator.process([
+               ["lit", "foo"],
+               ["lit", "@bar.com"],
                ["add"]
              ])
   end

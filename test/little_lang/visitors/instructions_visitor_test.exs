@@ -168,6 +168,22 @@ defmodule LittleLang.Visitors.InstructionsVisitorTest do
            ] = InstructionsVisitor.accept(ast)
   end
 
+  test "list expression" do
+    source = "[a, 2, 'foo']"
+    {:ok, ast} = Parser.process(source)
+
+    assert [
+             ["lit", []],
+             ["load", "a"],
+             ["append"],
+             ["lit", 2],
+             ["append"],
+             ["lit", "foo"],
+             ["append"],
+             ["bool_expr"]
+           ] = InstructionsVisitor.accept(ast)
+  end
+
   test "group expression" do
     source = "a or (b or c)"
     {:ok, ast} = Parser.process(source)
