@@ -77,4 +77,16 @@ defmodule LittleLang.Visitors.StringVisitorTest do
     {:ok, ast} = Parser.process(source)
     assert source == StringVisitor.accept(ast)
   end
+
+  test "blank ListLit" do
+    source = "[]"
+    {:ok, ast} = Parser.process(source)
+    assert source == StringVisitor.accept(ast)
+  end
+
+  test "ListLit" do
+    source = "[1, 2]"
+    {:ok, ast} = Parser.process(source)
+    assert source == StringVisitor.accept(ast)
+  end
 end

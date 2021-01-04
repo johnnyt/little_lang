@@ -104,6 +104,23 @@ defmodule LittleLang.Visitors.InstructionsVisitor do
     }
   end
 
+  defp visit(visitor, {:list_lit, expressions}) do
+    visitor_with_empty_list = %__MODULE__{
+      visitor
+      | instructions: visitor.instructions ++ [["lit", []]]
+    }
+
+    expressions
+    |> Enum.reduce(visitor_with_empty_list, fn arg, acc ->
+      vis = visit(acc, arg)
+
+      %__MODULE__{
+        vis
+        | instructions: vis.instructions ++ [["append"]]
+      }
+    end)
+  end
+
   defp num_instructions(visitor, ast) do
     count_visitor = visit(visitor, ast)
     length(count_visitor.instructions) - length(visitor.instructions)
