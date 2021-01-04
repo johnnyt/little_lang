@@ -98,7 +98,7 @@ defmodule LittleLang.ParserTest do
   test "parses list expression" do
     assert {:bool_expr,
             {
-              :list_lit,
+              :list_expr,
               [{:identifier, "a"}, {:identifier, "b"}]
             }} = Parser.process!("[a, b]")
   end

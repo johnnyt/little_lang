@@ -294,7 +294,7 @@ yeccpars2_3(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
 
 yeccpars2_4(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  NewStack = yeccpars2_4_(Stack),
- 'yeccgoto_\'Operand\''(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
+ 'yeccgoto_\'BasicExpr\''(hd(Ss), Cat, Ss, NewStack, T, Ts, Tzr).
 
 yeccpars2_5(S, equals, Ss, Stack, T, Ts, Tzr) ->
  yeccpars1(S, 23, Ss, Stack, T, Ts, Tzr);
@@ -436,7 +436,7 @@ yeccpars2_29(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
 yeccpars2_30(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  [_|Nss] = Ss,
  NewStack = yeccpars2_30_(Stack),
- 'yeccgoto_\'ListLit\''(hd(Nss), Cat, Nss, NewStack, T, Ts, Tzr).
+ 'yeccgoto_\'ListExpr\''(hd(Nss), Cat, Nss, NewStack, T, Ts, Tzr).
 
 %% yeccpars2_31: see yeccpars2_0
 
@@ -448,7 +448,7 @@ yeccpars2_32(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
 yeccpars2_33(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  [_,_|Nss] = Ss,
  NewStack = yeccpars2_33_(Stack),
- 'yeccgoto_\'ListLit\''(hd(Nss), Cat, Nss, NewStack, T, Ts, Tzr).
+ 'yeccgoto_\'ListExpr\''(hd(Nss), Cat, Nss, NewStack, T, Ts, Tzr).
 
 yeccpars2_34(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  [_|Nss] = Ss,
@@ -547,20 +547,20 @@ yeccpars2_39(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
 'yeccgoto_\'ExpressionList\''(35, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_36(36, Cat, Ss, Stack, T, Ts, Tzr).
 
--dialyzer({nowarn_function, 'yeccgoto_\'ListLit\''/7}).
-'yeccgoto_\'ListLit\''(0=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
+-dialyzer({nowarn_function, 'yeccgoto_\'ListExpr\''/7}).
+'yeccgoto_\'ListExpr\''(0=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_4(_S, Cat, Ss, Stack, T, Ts, Tzr);
-'yeccgoto_\'ListLit\''(1=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
+'yeccgoto_\'ListExpr\''(1=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_4(_S, Cat, Ss, Stack, T, Ts, Tzr);
-'yeccgoto_\'ListLit\''(14=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
+'yeccgoto_\'ListExpr\''(14=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_4(_S, Cat, Ss, Stack, T, Ts, Tzr);
-'yeccgoto_\'ListLit\''(15=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
+'yeccgoto_\'ListExpr\''(15=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_4(_S, Cat, Ss, Stack, T, Ts, Tzr);
-'yeccgoto_\'ListLit\''(21=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
+'yeccgoto_\'ListExpr\''(21=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_4(_S, Cat, Ss, Stack, T, Ts, Tzr);
-'yeccgoto_\'ListLit\''(31=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
+'yeccgoto_\'ListExpr\''(31=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_4(_S, Cat, Ss, Stack, T, Ts, Tzr);
-'yeccgoto_\'ListLit\''(35=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
+'yeccgoto_\'ListExpr\''(35=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_4(_S, Cat, Ss, Stack, T, Ts, Tzr).
 
 -dialyzer({nowarn_function, 'yeccgoto_\'LogicalOp\''/7}).
@@ -632,11 +632,11 @@ yeccpars2_39(_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_0(1, Cat, Ss, Stack, T, Ts, Tzr).
 
 -compile({inline,yeccpars2_4_/1}).
--file("src/little_lang_parser.yrl", 27).
+-file("src/little_lang_parser.yrl", 13).
 yeccpars2_4_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
-   { list_lit , __1 }
+   { list_expr , __1 }
   end | __Stack].
 
 -compile({inline,yeccpars2_5_/1}).
@@ -656,7 +656,7 @@ yeccpars2_8_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_9_/1}).
--file("src/little_lang_parser.yrl", 23).
+-file("src/little_lang_parser.yrl", 27).
 yeccpars2_9_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -664,7 +664,7 @@ yeccpars2_9_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_10_/1}).
--file("src/little_lang_parser.yrl", 26).
+-file("src/little_lang_parser.yrl", 30).
 yeccpars2_10_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -672,7 +672,7 @@ yeccpars2_10_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_11_/1}).
--file("src/little_lang_parser.yrl", 24).
+-file("src/little_lang_parser.yrl", 28).
 yeccpars2_11_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -696,7 +696,7 @@ yeccpars2_13_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_16_/1}).
--file("src/little_lang_parser.yrl", 25).
+-file("src/little_lang_parser.yrl", 29).
 yeccpars2_16_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -704,7 +704,7 @@ yeccpars2_16_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_22_/1}).
--file("src/little_lang_parser.yrl", 15).
+-file("src/little_lang_parser.yrl", 16).
 yeccpars2_22_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -744,7 +744,7 @@ yeccpars2_26_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_27_/1}).
--file("src/little_lang_parser.yrl", 14).
+-file("src/little_lang_parser.yrl", 15).
 yeccpars2_27_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -760,7 +760,7 @@ yeccpars2_29_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_30_/1}).
--file("src/little_lang_parser.yrl", 29).
+-file("src/little_lang_parser.yrl", 18).
 yeccpars2_30_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin
@@ -776,7 +776,7 @@ yeccpars2_32_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_33_/1}).
--file("src/little_lang_parser.yrl", 30).
+-file("src/little_lang_parser.yrl", 19).
 yeccpars2_33_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -784,7 +784,7 @@ yeccpars2_33_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_34_/1}).
--file("src/little_lang_parser.yrl", 21).
+-file("src/little_lang_parser.yrl", 25).
 yeccpars2_34_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin
@@ -808,7 +808,7 @@ yeccpars2_38_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_39_/1}).
--file("src/little_lang_parser.yrl", 17).
+-file("src/little_lang_parser.yrl", 21).
 yeccpars2_39_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin

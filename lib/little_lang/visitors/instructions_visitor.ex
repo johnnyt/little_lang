@@ -104,7 +104,7 @@ defmodule LittleLang.Visitors.InstructionsVisitor do
     }
   end
 
-  defp visit(visitor, {:list_lit, expressions}) do
+  defp visit(visitor, {:list_expr, expressions}) do
     visitor_with_empty_list = %__MODULE__{
       visitor
       | instructions: visitor.instructions ++ [["lit", []]]
