@@ -91,6 +91,24 @@ defmodule LittleLang.Evaluator do
     %__MODULE__{evaluator | stack: [@undefined | sub_stack]}
   end
 
+  # append
+  #
+  # Pops the top value of the stack as the value to append, pops the next value as the list to append to.
+  # If the list is undefined or not a list, undefined is pushed back onto the stack.
+  # Otherwise the new list with the value appended to the end is pushed onto the stack.
+  def process_instruction(
+        %__MODULE__{processing: ["append"], stack: [_value | [list | sub_stack]]} = evaluator
+      )
+      when is_undefined?(list) or not is_list(list) do
+    %__MODULE__{evaluator | stack: [@undefined | sub_stack]}
+  end
+
+  def process_instruction(
+        %__MODULE__{processing: ["append"], stack: [value | [list | sub_stack]]} = evaluator
+      ) do
+    %__MODULE__{evaluator | stack: [list ++ [value] | sub_stack]}
+  end
+
   # subtract
   #
   # Pops the top two values from the stack to subtract.
