@@ -61,6 +61,28 @@ defmodule LittleLang.Visitors.InstructionsVisitor do
     }
   end
 
+  defp visit(visitor, {:conversion, {:type, type}, expr}) when type in ["int", "integer"] do
+    visited =
+      visitor
+      |> visit(expr)
+
+    %__MODULE__{
+      visited
+      | instructions: visited.instructions ++ [["to_int"]]
+    }
+  end
+
+  defp visit(visitor, {:conversion, {:type, type}, expr}) when type in ["str", "string"] do
+    visited =
+      visitor
+      |> visit(expr)
+
+    %__MODULE__{
+      visited
+      | instructions: visited.instructions ++ [["to_str"]]
+    }
+  end
+
   defp visit(
          %__MODULE__{instructions: instructions} = visitor,
          {lit_type, lit_value}

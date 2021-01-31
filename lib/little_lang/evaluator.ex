@@ -276,6 +276,45 @@ defmodule LittleLang.Evaluator do
     %__MODULE__{evaluator | stack: [@undefined | rest]}
   end
 
+  # to_int
+  #
+  # Convert the top of the stack to an integer
+  def process_instruction(
+        %__MODULE__{processing: ["to_int"], stack: [top | _rest_of_stack]} = evaluator
+      )
+      when is_integer(top),
+      do: evaluator
+
+  def process_instruction(
+        %__MODULE__{processing: ["to_int"], stack: [top | rest_of_stack]} = evaluator
+      )
+      when is_binary(top) do
+    int_value =
+      top
+      |> Integer.parse()
+      |> case do
+        {val, _rest} -> val
+        :error -> @undefined
+      end
+
+    %__MODULE__{evaluator | stack: [int_value | rest_of_stack]}
+  end
+
+  # to_string
+  #
+  # Convert the top of the stack to a string
+  def process_instruction(
+        %__MODULE__{processing: ["to_str"], stack: [top | _rest_of_stack]} = evaluator
+      )
+      when is_binary(top),
+      do: evaluator
+
+  def process_instruction(
+        %__MODULE__{processing: ["to_str"], stack: [top | rest_of_stack]} = evaluator
+      ) do
+    %__MODULE__{evaluator | stack: ["#{top}" | rest_of_stack]}
+  end
+
   # === Private helpers
 
   # Done processing instructions - return the top of the stack

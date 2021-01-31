@@ -17,6 +17,21 @@ defmodule LittleLang do
       true
 
   """
+  def parse(string, _context \\ %{}) do
+    string
+    |> Lexer.process!()
+    |> Parser.process!()
+  end
+
+  @doc """
+  Compiles and evaluates the provided string.
+
+  ## Examples
+
+      iex> LittleLang.evaluate("(3 - 4) = -1")
+      true
+
+  """
   def evaluate(string, context \\ %{}) do
     string
     |> Lexer.process!()
