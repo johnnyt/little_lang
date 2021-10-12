@@ -11,13 +11,14 @@ Rootsymbol BoolExpr.
 
 Left 10 LogicalOp.
 Left 20 RelOp.
-Left 30 DualOp.
+Left 30 BinaryOp.
 Left 40 colon_colon.
 
 BoolExpr   -> Expression          : {bool_expr, '$1'}.
 
 Expression -> UnaryExpr                         : '$1'.
 Expression -> Expression BinaryOp Expression    : {binary_expr, '$2', '$1', '$3'}.
+Expression -> Expression RelOp Expression       : {binary_expr, '$2', '$1', '$3'}.
 Expression -> Expression colon_colon type       : {conversion, extract('$3'), '$1'}.
 
 UnaryExpr  -> UnaryOp UnaryExpr   : {unary_expr, '$1', '$2'}.
@@ -46,16 +47,11 @@ UnaryOp    -> bang    : extract('$1').
 UnaryOp    -> minus   : extract('$1').
 UnaryOp    -> not     : extract('$1').
 
-BinaryOp   -> RelOp     : '$1'.
-BinaryOp   -> LogicalOp : '$1'.
-BinaryOp   -> DualOp    : '$1'.
-
-LogicalOp  -> or      : extract('$1').
+BinaryOp   -> or      : extract('$1').
+BinaryOp   -> plus    : extract('$1').
+BinaryOp   -> minus   : extract('$1').
 
 RelOp      -> equals  : extract('$1').
-
-DualOp     -> plus    : extract('$1').
-DualOp     -> minus   : extract('$1').
 
 Erlang code.
 

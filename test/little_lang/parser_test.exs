@@ -19,6 +19,16 @@ defmodule LittleLang.ParserTest do
     assert {:bool_expr, {:unary_expr, {:minus, "-"}, {:int_lit, 42}}} = Parser.process!("-42")
   end
 
+  test "gives precedence to relational operations" do
+    assert {:bool_expr,
+            {
+              :binary_expr,
+              {:equals, "="},
+              {:binary_expr, {:plus, "+"}, {:int_lit, 1}, {:int_lit, 2}},
+              {:int_lit, 3}
+            }} = Parser.process!("1 + 2 = 3")
+  end
+
   test "parses binary expression" do
     assert {:bool_expr,
             {
